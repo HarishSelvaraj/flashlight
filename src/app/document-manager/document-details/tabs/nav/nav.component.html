@@ -1,0 +1,39 @@
+
+<div fxLayout="column" class="components-container-gt-xs" [ngClass.xs]="'components-container-xs'" fxLayoutGap="20px">
+    <div class="input-container">  
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
+        <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Label">
+            </mat-form-field>
+          </form>
+        </div>
+        <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-select placeholder="Type">
+                <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+        <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="JS">
+            </mat-form-field>
+          </form>
+        </div>
+        <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
+          <button mat-button color="primary">Add New</button>
+        </div>
+      </div>
+  
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
+        <div fxFlex.xs="100">
+          <button style="float:right;" mat-raised-button color="primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
