@@ -57,3 +57,46 @@ export const ResponsiveTableHelpers = {
   
   /** Constants used to fill up our data base. */
   
+  export const ResponsiveTableHelpersBody = {
+    header : [
+          {
+              name:'FIELD',
+              key:'id',
+              order:'asc'
+          },
+          {
+              name:'ELEMENT TYPE',
+              key: 'basename',
+              order:'asc'
+          },
+          {
+              name:'LABEL',
+              key:'database',
+              order:'asc'
+          },
+          {
+              name:'VIEW TYPE',
+              key:'object',
+              order:'asc'
+          }
+      ],
+      rows : [{
+          id: "01",
+          basename: "Base Name 1",
+          database: "Database 1",
+          object: "Table Name"
+      },{
+          id: "02",
+          basename: "Base Name 2",
+          database: "Database 2",
+          object: "View"
+      },{
+          id: "03",
+          basename: "Base Name 3",
+          database: "Database 3",
+          object: "Table Name"
+      }]
+  }
+  
+  /** Constants used to fill up our data base. */
+  

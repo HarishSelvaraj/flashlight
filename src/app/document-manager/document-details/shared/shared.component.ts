@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DocumentManagerService } from '../../services/document-manager.service';
 
 @Component({
   selector: 'app-shared',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SharedComponent implements OnInit {
 
-  constructor() { }
+  formTypesSelected : any;
+
+  constructor(private documentManagerService : DocumentManagerService) { }
 
   ngOnInit() {
+    this.formTypesSelected = this.documentManagerService.getDocumentFormTypes();
   }
 
 }

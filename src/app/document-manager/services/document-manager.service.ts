@@ -13,6 +13,6 @@ export class DocumentManagerService {
     }
 
     getDocumentFormTypes(): Observable<any> {
-        return this.formTypes;
+        return this.formTypes.value;
     }
 }

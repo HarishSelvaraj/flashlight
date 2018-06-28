@@ -49,10 +49,11 @@
 					<mat-divider></mat-divider>
 					<mat-form-field>
 					  <mat-select (change)="selectFormType()" placeholder="Select Form Type" [formControl]="formType" multiple>
-							<mat-option *ngFor="let ft of formTypes" [value]="ft.value">
+							<mat-option *ngFor="let ft of formTypes" [value]="ft">
 												{{ ft.viewValue }}
 							</mat-option>
 						</mat-select>
+						<mat-error *ngIf="formType.hasError('required')">Please choose at least one formtype</mat-error>
 					</mat-form-field>
 					</div>
 			</div>	

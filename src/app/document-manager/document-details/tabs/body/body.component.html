@@ -1,3 +1,84 @@
-<p>
-  body works!
-</p>
+<div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxFlexFill style="padding: 20px;">
+
+    <div fxLayout="column" style="background-color: white; padding: 10px;" fxLayoutAlign="space-between stretch" fxLayoutGap="5px"
+        fxFlexFill>
+
+        <!-- <mat-toolbar>
+          <h3 style="margin-left: 16px;" class="mat-heading"> Document List </h3>
+          <span class="spacer"></span>
+          <button style="margin-right: 16px;" (click)="addNewDocument()" mat-raised-button color="primary">Add New</button>
+      </mat-toolbar> -->
+
+        <div >
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">FIELD</th>
+                        <th scope="col">ELEMENT TYPE</th>
+                        <th scope="col">LABEL</th>
+                        <th scope="col">VIEW TYPE</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>
+                                <mat-checkbox></mat-checkbox>
+                                COLUMN
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <mat-form-field>
+                                    <mat-select placeholder="Element Type">
+                                        <mat-option *ngFor="let elementType of elementTypes" [value]="elementType">
+                                            {{elementType.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Label">
+                                </mat-form-field>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <mat-form-field>
+                                    <mat-select placeholder="View Type">
+                                        <mat-option *ngFor="let viewType of viewTypes" [value]="viewType">
+                                            {{viewType.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <mat-icon class="space">cached</mat-icon>
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- <tr *ngIf="rows?.length==0 && status==false">
+                        <td [colSpan]="header.length" style="text-align: center;">
+                            No records found
+                        </td>
+                    </tr> -->
+                </tbody>
+                <!-- <thead *matHeaderRowDef="displayedColumns"></thead>
+                <tr *matRowDef="let row; columns: displayedColumns;"></tr> -->
+            </table>
+            <!-- <mat-paginator [length]="pageLength" [pageSize]="pageSize" [pageSizeOptions]="[1, 5, 10, 25, 100, 150, 200]" (page)="next($event)">
+            </mat-paginator> -->
+        </div>
+        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">                
+            <div fxFlex.xs="100">
+                <button style="float:right;" mat-raised-button color="primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
