@@ -22,6 +22,7 @@ import { SharedComponent } from './document-details/shared/shared.component';
 import { HeaderComponent } from './document-details/tabs/header/header.component';
 import { NavComponent } from './document-details/tabs/nav/nav.component';
 import { BodyComponent } from './document-details/tabs/body/body.component';
+import { ReportsComponent } from './document-details/tabs/reports/reports.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -72,7 +73,8 @@ export const appRoutes: Routes = [
     ReactiveFormsModule,
     MatDividerModule,
     FlexLayoutModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCheckboxModule
   ],
   declarations: [MasterDocumentComponent,
     DocumentManagerComponent,
@@ -81,7 +83,8 @@ export const appRoutes: Routes = [
     SharedComponent,
     HeaderComponent,
     NavComponent,
-    BodyComponent
+    BodyComponent,
+    ReportsComponent
   ],
   providers: [
     {

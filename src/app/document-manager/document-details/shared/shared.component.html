@@ -1,8 +1,8 @@
 <mat-accordion>
-  <mat-expansion-panel>
+  <mat-expansion-panel *ngFor="let formType of formTypesSelected">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Edit
+        {{formType.value}}
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="example-header">
@@ -26,7 +26,7 @@
           </ng-template>
           <app-header></app-header>
         </mat-tab>
-        <mat-tab>
+        <mat-tab *ngIf="formType.tabs">
           <ng-template mat-tab-label>
             NAV
           </ng-template>
@@ -36,15 +36,13 @@
           <ng-template mat-tab-label>
             BODY
           </ng-template>
-          <h1>Terrible sushi restaurants</h1>
-          <p>...</p>
+         <app-body></app-body>
         </mat-tab>
-        <mat-tab>
+        <mat-tab  *ngIf="formType.tabs">
           <ng-template mat-tab-label>
             REPORT
           </ng-template>
-          <h1>Terrible sushi restaurants</h1>
-          <p>...</p>
+         <app-reports></app-reports>
         </mat-tab>
       </mat-tab-group>
 

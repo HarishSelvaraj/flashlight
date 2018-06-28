@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { DocumentManagerService } from '../services/document-manager.service';
 
 @Component({
@@ -10,41 +10,44 @@ import { DocumentManagerService } from '../services/document-manager.service';
 })
 export class CreateDocumentComponent implements OnInit {
 
-    databases = [
-        { value: 'db1', viewValue: 'Database 1' },
-        { value: 'db2-1', viewValue: 'Database 2' },
-        { value: 'db3', viewValue: 'Database 3' }
-      ];
+  databases = [
+    { value: 'db1', viewValue: 'Database 1' },
+    { value: 'db2-1', viewValue: 'Database 2' },
+    { value: 'db3', viewValue: 'Database 3' }
+  ];
 
-      objects = [
-        { value: 'obj1', viewValue: 'Object 1' },
-        { value: 'obj2', viewValue: 'Object 2' },
-        { value: 'obj3', viewValue: 'Object 3' }
-      ];
+  objects = [
+    { value: 'obj1', viewValue: 'Object 1' },
+    { value: 'obj2', viewValue: 'Object 2' },
+    { value: 'obj3', viewValue: 'Object 3' }
+  ];
 
-      formType = new FormControl();
-      formTypes = [
-        { value: 'ft1', viewValue: 'Search' },
-        { value: 'ft2', viewValue: 'List' },
-        { value: 'ft3', viewValue: 'Edit' },
-        { value: 'ft4', viewValue: 'Portfolio' },
-        { value: 'ft5', viewValue: 'Reports' }
-      ];
+  //  formType = new FormControl();
+  formType = new FormControl('', [Validators.required]);
+  formTypes = [
+    { value: 'Search', viewValue: 'Search', tabs: false },
+    { value: 'List', viewValue: 'List', tabs: false },
+    { value: 'Edit', viewValue: 'Edit', tabs: true },
+    { value: 'Portfolio', viewValue: 'Portfolio', tabs: false },
+    { value: 'Reports', viewValue: 'Reports', tabs: false }
+  ];
 
 
-      constructor(private router: Router, private documentManagerService : DocumentManagerService) { }
+  constructor(private router: Router, private documentManagerService: DocumentManagerService) { }
 
   ngOnInit() {
   }
 
   selectFormType() {
-    //console.log(this.formType);
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
   documentDetails() {
-    //console.log('i am in create document componenet..');
-   // console.log(this.documentManagerService.getDocumentFormTypes());
+    console.log(this.formType);
+    if (this.formType.status == "INVALID") {
+      alert('Pls select at least one form type.');
+      return false;
+    }
     this.router.navigate(['/document-manager/details']);
   }
 
