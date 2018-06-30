@@ -1,3 +1,24 @@
 label {
-    font: bold;
+  font: bold;
+}
+
+.headercontent {
+  background: whitesmoke;
+}
+
+.removepadding {
+  padding: 0 !important;
+}
+
+.cl-4 {
+  width: 30.33%;
+  padding: 10px;
+}
+
+.matparent * {
+    color:grey;
+}
+
+.mat-tab-header>* {
+  background: whitesmoke !important;
 }
