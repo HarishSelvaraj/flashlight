@@ -11,5 +11,14 @@ export class GeneralServiceService {
   getMetaDataList(api,requestData) {
     return this.http.post(environment.apiUrl + api, requestData);
   }
+  getDbLlist(api) {
+    return this.http.post(environment.apiUrl + api);
+  }
+  getTableLlist(api, requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
+  getColumnlist(api, requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
 
 }

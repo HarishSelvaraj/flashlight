@@ -10,9 +10,9 @@
 					<h4  class="mat-subheading-2 center-align">DATABASE</h4>
 					<mat-divider></mat-divider>
 					<mat-form-field>
-	  					<mat-select placeholder="Select Database">
-		    				<mat-option *ngFor="let db of databases" [value]="db.value">
-		      								{{ db.viewValue }}
+	  					<mat-select placeholder="Select Database" (change)="onChangeDB($event.value)">
+		    				<mat-option *ngFor="let db of dbList" [value]="db">
+		      								{{ db }}
 		    				</mat-option>
 	  					</mat-select>
 					</mat-form-field>
@@ -21,9 +21,9 @@
 					<h4  class="mat-subheading-2 center-align">OBJECT</h4>
 					<mat-divider></mat-divider>
 					<mat-form-field>
-					  <mat-select placeholder="Select Object">
-							<mat-option *ngFor="let obj of objects" [value]="obj.value">
-												{{ obj.viewValue }}
+					  <mat-select placeholder="Select Object" (change)="onChangeTable($event.value)">
+							<mat-option *ngFor="let obj of objectList" [value]="obj.TABLE_NAME">
+												{{ obj.TABLE_NAME }}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
