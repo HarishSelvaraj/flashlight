@@ -1,18 +1,17 @@
-
 <div fxLayout="column" class="components-container-gt-xs" [ngClass.xs]="'components-container-xs'" fxLayoutGap="20px">
   <div class="input-container">
     <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
       <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
         <form class="example-form">
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Header Content">
+          <mat-form-field class="example-full-width headerwidth">
+            <input matInput placeholder="Header Content" [(ngModel)]="forms.header" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
         </form>
       </div>
       <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
         <form class="example-form">
           <mat-form-field class="example-full-width">
-            <mat-select placeholder="Columns">
+            <mat-select placeholder="Columns" [(ngModel)]="forms.column" [ngModelOptions]="{standalone: true}">
               <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -24,14 +23,14 @@
       <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
         <form class="example-form">
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="Label">
+            <input matInput placeholder="Label" [(ngModel)]="forms.label" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
         </form>
       </div>
       <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
         <form class="example-form">
           <mat-form-field class="example-full-width">
-            <mat-select placeholder="Type">
+            <mat-select placeholder="Type" [(ngModel)]="forms.type" [ngModelOptions]="{standalone: true}">
               <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -40,12 +39,13 @@
       <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
         <form class="example-form">
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="JS">
+            <input matInput placeholder="JS" [(ngModel)]="forms.js" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
         </form>
       </div>
-      <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50">
-        <button mat-button color="primary">Add New</button>
+      <div fxFlex.xs="100" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50" [hidden]='addicon'>
+        <button mat-button color="primary" (click)="addnew(forms)">
+          <mat-icon style="color:green;">add</mat-icon> Add New </button>
       </div>
     </div>
 
