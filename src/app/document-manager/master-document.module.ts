@@ -23,6 +23,8 @@ import { HeaderComponent } from './document-details/tabs/header/header.component
 import { NavComponent } from './document-details/tabs/nav/nav.component';
 import { BodyComponent } from './document-details/tabs/body/body.component';
 import { ReportsComponent } from './document-details/tabs/reports/reports.component';
+import { GeneralServiceService } from '../service/general-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -74,7 +76,8 @@ export const appRoutes: Routes = [
     MatDividerModule,
     FlexLayoutModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    HttpClientModule
   ],
   declarations: [MasterDocumentComponent,
     DocumentManagerComponent,
@@ -86,7 +89,7 @@ export const appRoutes: Routes = [
     BodyComponent,
     ReportsComponent
   ],
-  providers: [
+  providers: [GeneralServiceService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
