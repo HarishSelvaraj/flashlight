@@ -1,46 +1,43 @@
 <div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxFlexFill style="padding: 20px;">
-
-    <div fxLayout="column" style="background-color: white; padding: 10px;" fxLayoutAlign="space-between stretch" fxLayoutGap="5px"
-        fxFlexFill>
-
-        <mat-toolbar>
+    <div fxLayout="column" style="background-color: white; padding: 10px;" fxLayoutAlign="space-between stretch" fxLayoutGap="5px">
+        <mat-toolbar fxFlex="auto">
             <h3 style="margin-left: 16px;" class="mat-heading"> Document List </h3>
             <span class="spacer"></span>
             <button style="margin-right: 16px;" (click)="addNewDocument()" mat-raised-button color="primary">Add New</button>
         </mat-toolbar>
+        <div class="example-header" fxFlex="auto" style="padding-top:15px;">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+            </mat-form-field>
+        </div>
+        <div class="example-container mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="basename">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header scope="col"> BASE NAME </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="text-align: center"> {{row._fl_base_name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="basetable">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> TABLE NAME </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="text-align: center"> {{row._fl_base_table}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="documenttype">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> DOCUMENT TYPE </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="text-align: center"> {{row._fl_doc_type}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="databasename">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> DATABASE NAME </mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="text-align: center"> Incite </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;">
+                </mat-row>
+            </mat-table>
 
-        <div class="table-container">
-            <table matSort (matSortChange)="sortData($event)">
-                <thead>
-                    <tr>
-                        <th mat-sort-header="{{th.key}}" scope="col" *ngFor="let th of helpers?.header">{{th.name}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of rows let i=index">
-                        <td [attr.data-label]="th.name" *ngFor="let th of helpers?.header">
-
-                            <span *ngIf="th.key!='action'">
-
-                                {{row[th.key]}}
-
-                                <mat-chip (click)="findDuplicates(row)" selected="true" color="warn" matTooltip="{{row['duplicate_applications'].length}} duplicate entries"
-                                    matTooltipPosition="right" *ngIf="th.key=='applicationNumber' && row['duplicate_applications'] != 'undefined' && row['duplicate_applications'] && row['duplicate_applications'].length > 0">
-                                    {{row['duplicate_applications'].length }}
-                                </mat-chip>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr *ngIf="rows?.length==0 && status==false">
-                        <td [colSpan]="header.length" style="text-align: center;">
-                            No records found
-                        </td>
-                    </tr>
-                </tbody>
-                <thead *matHeaderRowDef="displayedColumns"></thead>
-                <tr *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-            <mat-paginator [length]="pageLength" [pageSize]="pageSize" [pageSizeOptions]="[1, 5, 10, 25, 100, 150, 200]" (page)="next($event)">
+            <mat-paginator #paginator [length]="100" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
             </mat-paginator>
         </div>
     </div>
