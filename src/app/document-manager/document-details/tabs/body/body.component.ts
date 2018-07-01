@@ -18,6 +18,8 @@ export class BodyComponent implements OnInit {
     pageLength = 0;
     pageSize = 3;
     helpers = ResponsiveTableHelpersBody;
+    @Input() columns;
+    @Input() lookupsData;
     @Input() status;
     @Input() actionStatus;
     @Output() edit = new EventEmitter();
@@ -27,35 +29,34 @@ export class BodyComponent implements OnInit {
     @Output() sort = new EventEmitter();
     @Output() dup = new EventEmitter();
 
-
-    elementTypes = [
-        {
-            name: 'Element Type 1', data: [{ name: 'Element Type 2', data: '8', newcontent: 'new2' },
-            { name: 'Element Type 3', data: '3', newcontent: 'new3' },
-            { name: 'Element Type 4', data: '69', newcontent: 'new4' }]
-        },
-        {
-            name: 'Element Type 2', data: [{ name: 'Element Type 3', data: '9', newcontent: 'new2' },
-            { name: 'Element Type 3', data: '78', newcontent: 'new3' },
-            { name: 'Element Type 4', data: '4', newcontent: 'new4' }]
-        },
-        {
-            name: 'Element Type 3', data: [{ name: 'Element Type 8', data: '88', newcontent: 'new2' },
-            { name: 'Element Type 3', data: '66', newcontent: 'new3' },
-            { name: 'Element Type 4', data: '4', newcontent: 'new4' }]
-        },
-        {
-            name: 'Element Type 4', data: [{ name: 'Element Type 7', data: '77', newcontent: 'new2' },
-            { name: 'Element Type 3', data: '3', newcontent: 'new3' },
-            { name: 'Element Type 4', data: '55', newcontent: 'new4' }]
-        },
-    ];
+    elementType = ['TEXT', 'SELECT', 'TEXTAREA', 'LABEL'];
+    //elementTypes = [
+    //    {
+    //        name: 'Element Type 1', data: [{ name: 'Element Type 2', data: '8', newcontent: 'new2' },
+    //        { name: 'Element Type 3', data: '3', newcontent: 'new3' },
+    //        { name: 'Element Type 4', data: '69', newcontent: 'new4' }]
+    //    },
+    //    {
+    //        name: 'Element Type 2', data: [{ name: 'Element Type 3', data: '9', newcontent: 'new2' },
+    //        { name: 'Element Type 3', data: '78', newcontent: 'new3' },
+    //        { name: 'Element Type 4', data: '4', newcontent: 'new4' }]
+    //    },
+    //    {
+    //        name: 'Element Type 3', data: [{ name: 'Element Type 8', data: '88', newcontent: 'new2' },
+    //        { name: 'Element Type 3', data: '66', newcontent: 'new3' },
+    //        { name: 'Element Type 4', data: '4', newcontent: 'new4' }]
+    //    },
+    //    {
+    //        name: 'Element Type 4', data: [{ name: 'Element Type 7', data: '77', newcontent: 'new2' },
+    //        { name: 'Element Type 3', data: '3', newcontent: 'new3' },
+    //        { name: 'Element Type 4', data: '55', newcontent: 'new4' }]
+    //    },
+    //];
 
     viewTypes = [
-        { name: 'View Type 1' },
-        { name: 'View Type 2' },
-        { name: 'View Type 3' },
-        { name: 'View Type 4' },
+        { name: 'Auto',value:'A' },
+        { name: 'Required',value:'R' },
+        { name: 'Optional',value:'O' }
     ];
 
 
@@ -65,6 +66,9 @@ export class BodyComponent implements OnInit {
     ngOnInit() {
         this.getRows();
         this.show = false;
+        console.log('lookUPS');
+        debugger;
+        console.log(this.columns);
     }
     next(event) {
         this.rows = [];

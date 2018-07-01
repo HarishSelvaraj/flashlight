@@ -2,7 +2,7 @@
   <mat-expansion-panel *ngFor="let formType of formTypesSelected">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{formType.value}}
+        {{formType.viewValue}}
       </mat-panel-title>
     </mat-expansion-panel-header>
 
@@ -19,6 +19,7 @@
       <mat-form-field class="cl-4">
         <input matInput placeholder="URL">
       </mat-form-field>
+      
     </div>
 
     <mat-tab-group class="matparent">
@@ -38,7 +39,7 @@
         <ng-template mat-tab-label>
           BODY
         </ng-template>
-        <app-body></app-body>
+        <app-body [columns]="formType.columns" [lookupsData]="lookupsData"></app-body>
       </mat-tab>
       <mat-tab *ngIf="formType.tabs" class="color">
         <ng-template mat-tab-label>

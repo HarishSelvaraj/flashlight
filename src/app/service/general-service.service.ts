@@ -20,5 +20,11 @@ export class GeneralServiceService {
   getColumnlist(api, requestData) {
     return this.http.post(environment.apiUrl + api, requestData);
   }
+  getlookups(api,requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
+  postMetaData(api, requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
 
 }

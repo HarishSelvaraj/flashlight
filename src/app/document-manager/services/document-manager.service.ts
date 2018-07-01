@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class DocumentManagerService {
 
-    formTypes: any;
-
+  formTypes: any;
+  selectedData: any = {};
     constructor() { }
 
     setDocumentFormTypes(formTypes) {
@@ -15,4 +15,8 @@ export class DocumentManagerService {
     getDocumentFormTypes(): Observable<any> {
         return this.formTypes.value;
     }
+    selectedMetaData(data) {
+      this.selectedData = data;
+    }
+
 }
