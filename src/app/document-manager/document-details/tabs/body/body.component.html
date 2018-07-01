@@ -22,29 +22,29 @@
     <div *ngFor="let column of columns; let i = index;">
       <button class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
         <div fxFlex.xs="50" fxFlex.lg="12.5" fxFlex.md="12.5" fxFlex.sm="25">
-          <mat-checkbox [(ngModel)]="column.checked" class="">{{column.COLUMN_NAME}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent()">{{column.COLUMN_NAME}}</mat-checkbox>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field class="">
+          <mat-form-field (click)="stopEvent()">
             <mat-select placeholder="Element Type" [(ngModel)]="column.etype">
               <mat-option *ngFor="let etype of elementType" [value]="etype">{{etype}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field>
+          <mat-form-field (click)="stopEvent()">
             <input matInput placeholder="LABEL" [(ngModel)]="column.label">
           </mat-form-field>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field>
+          <mat-form-field (click)="stopEvent()">
             <mat-select placeholder="View Type" [(ngModel)]="column.vtype">
               <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="12.5" fxFlex.md="12.5" fxFlex.sm="25">
-          <mat-icon>file_copy</mat-icon>
+          <mat-icon  (click)="stopEvent()">file_copy</mat-icon>
         </div>
       </button>
       <div class="panel">

@@ -81,6 +81,9 @@ export class BodyComponent implements OnInit {
     }
     sortData(val) {
     }
+    stopEvent() {
+      event.stopPropagation();
+    }
     open(data_bind) {
         const acc = document.getElementsByClassName('accordion');
         let i;

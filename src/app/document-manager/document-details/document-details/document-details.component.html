@@ -10,7 +10,14 @@
               <th style="padding-left: 50px;" scope="col">DATABASE NAME</th>
               <th style="padding-left: 215px;" scope="col">OBJECT</th>
               <th style="padding-left: 245px;" scope="col">BASE NAME</th>
-              <mat-icon (click)="editDocument()" style="padding-left: 170px;" class="space">launch</mat-icon>
+              <th>
+                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
+                  <div fxFlex.xs="100">
+                    <button style="float:right;" mat-raised-button color="primary" (click)="saveform();">Save</button>
+                  </div>
+                </div>
+              </th>
+              <!--<mat-icon (click)="editDocument()" style="padding-left: 170px;" class="space">launch</mat-icon>-->
             </tr>
           </thead>
           <tbody>
@@ -29,11 +36,7 @@
           </tbody>
         </table>
       </div>
-      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
-        <div fxFlex.xs="100">
-          <button style="float:right;" mat-raised-button color="primary" (click)="saveform();">Save</button>
-        </div>
-      </div>
+
     </mat-toolbar>
   </div>
   <app-shared [columns]="columnsList" [lookupsData]="lookupsData"></app-shared>
