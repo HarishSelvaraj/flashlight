@@ -12,7 +12,7 @@ export class GeneralServiceService {
     return this.http.post(environment.apiUrl + api, requestData);
   }
   getDbLlist(api) {
-    return this.http.post(environment.apiUrl + api);
+    return this.http.post(environment.apiUrl + api, {});
   }
   getTableLlist(api, requestData) {
     return this.http.post(environment.apiUrl + api, requestData);

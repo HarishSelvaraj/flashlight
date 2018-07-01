@@ -60,7 +60,8 @@ export class CreateDocumentComponent implements OnInit {
   constructor(private router: Router, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { }
 
   ngOnInit() {
-    this.generalServiceService.getDbLlist('addNewDocument').subscribe
+    let api = 'addNewDocument';
+    this.generalServiceService.getDbLlist(api).subscribe
       (repsonse => {
         this.dbList = repsonse['createDocument'].dbname;
         this.formRecord = repsonse['createDocument'].form;
