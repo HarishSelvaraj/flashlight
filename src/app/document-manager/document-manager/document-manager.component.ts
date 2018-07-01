@@ -72,4 +72,7 @@ export class DocumentManagerComponent implements OnInit {
   addNewDocument() {
     this.router.navigate(['/document-manager/addnew']);
   }
+  EditDocument(){
+    alert("Edit")
+  }
 }
