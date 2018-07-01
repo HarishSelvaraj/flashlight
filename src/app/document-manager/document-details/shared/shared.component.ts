@@ -14,18 +14,15 @@ export class SharedComponent implements OnInit {
   constructor(private documentManagerService : DocumentManagerService) { }
 
   ngOnInit() {
-    console.log(this.lookupsData);
-    debugger;
+    
     this.formTypesSelected = this.documentManagerService.getDocumentFormTypes();
     for (let key in this.formTypesSelected) {
       this.formTypesSelected[key].columns = JSON.parse(JSON.stringify(this.columns));// Object['assign']([], this.columns);
     }
-    console.log(this.formTypesSelected);
     //this
   }
 
   saveform() {
-    debugger;
     this.columns;
   }
 
