@@ -25,10 +25,14 @@ export class CreateDocumentComponent implements OnInit {
     "dbname": "",
     "tablename": ""
   }
-
+  baseName;
   dbList: any;
   objectList: any;
   columnstList: any;
+  selectedData: any = {};
+  masterData: any = [];
+  detailsData: any;
+  formRecord: any;
 
   databases = [
     { value: 'db1', viewValue: 'Database 1' },
@@ -45,11 +49,11 @@ export class CreateDocumentComponent implements OnInit {
   //  formType = new FormControl();
   formType = new FormControl('', [Validators.required]);
   formTypes = [
-    { value: 'Search', viewValue: 'Search', tabs: false },
-    { value: 'List', viewValue: 'List', tabs: false },
-    { value: 'Edit', viewValue: 'Edit', tabs: true },
-    { value: 'Portfolio', viewValue: 'Portfolio', tabs: false },
-    { value: 'Reports', viewValue: 'Reports', tabs: false }
+    { value: 'S', viewValue: 'Search', tabs: false },
+    { value: 'L', viewValue: 'List', tabs: false },
+    { value: 'E', viewValue: 'Edit', tabs: true },
+    { value: 'P', viewValue: 'Portfolio', tabs: false },
+    { value: 'R', viewValue: 'Reports', tabs: false }
   ];
 
 
@@ -58,12 +62,15 @@ export class CreateDocumentComponent implements OnInit {
   ngOnInit() {
     this.generalServiceService.getDbLlist('addNewDocument').subscribe
       (repsonse => {
-        debugger;
         this.dbList = repsonse['createDocument'].dbname;
+        this.formRecord = repsonse['createDocument'].form;
+       // this.masterData = repsonse['createDocument'].form.master;
+       // this.detailsData = repsonse['createDocument'].form.detail;
       });
   }
 
   selectFormType() {
+   
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
@@ -72,7 +79,6 @@ export class CreateDocumentComponent implements OnInit {
     this.requestTableData.dbname = db
     this.generalServiceService.getTableLlist('listTablesInDatabase', this.requestTableData).subscribe
       (repsonse => {
-        debugger;
         this.objectList = repsonse['metaDataResult'].tableList;
       });
   }
@@ -81,7 +87,6 @@ export class CreateDocumentComponent implements OnInit {
     this.requestColumnData.tablename = table
     this.generalServiceService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
       (repsonse => {
-        debugger;
         this.columnstList = repsonse['metaDataResult'].columns;
       });
   }
@@ -91,6 +96,25 @@ export class CreateDocumentComponent implements OnInit {
       alert('Pls select at least one form type.');
       return false;
     }
+    debugger;
+    this.selectedData.db = this.requestTableData;
+    this.selectedData.table = this.requestColumnData;
+    this.selectedData.columns = this.columnstList;
+    this.selectedData.baseName = this.baseName;
+    if (this.formType['value'].length > 0) {
+      for (let key in this.formType['value']) {
+        this.masterData.push(Object['assign']({}, this.formRecord['master']));
+        this.masterData[key]._fl_doc_name = this.baseName +'_'+ this.formType['value'][key].viewValue;
+        this.masterData[key]._fl_doc_type = this.formType['value'][key].value;
+        this.masterData[key]._fl_base_name = this.baseName;
+        this.masterData[key]._fl_base_table = this.requestColumnData.tablename;
+
+      }
+      debugger;
+      this.selectedData.masterData = this.masterData;
+      this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
+    }
+    this.documentManagerService.selectedMetaData(this.selectedData);
     this.router.navigate(['/document-manager/details']);
   }
 

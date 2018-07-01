@@ -19,27 +19,27 @@
         </tr>
       </thead>
     </table>
-    <div *ngFor="let elemend of elementTypes; let i = index;">
-      <button class="accordion" (click)="open(elemend.data)" style="align-items: center;">
+    <div *ngFor="let column of columns; let i = index;">
+      <button class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
         <div fxFlex.xs="50" fxFlex.lg="12.5" fxFlex.md="12.5" fxFlex.sm="25">
-          <mat-checkbox class="">column {{i}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="column.checked" class="">{{column.COLUMN_NAME}}</mat-checkbox>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
           <mat-form-field class="">
-            <mat-select>
-              <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
+            <mat-select placeholder="Element Type" [(ngModel)]="column.etype">
+              <mat-option *ngFor="let etype of elementType" [value]="etype">{{etype}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
           <mat-form-field>
-            <input matInput value="Sushi">
+            <input matInput placeholder="LABEL" [(ngModel)]="column.label">
           </mat-form-field>
         </div>
         <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
           <mat-form-field>
-            <mat-select>
-              <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
+            <mat-select placeholder="View Type" [(ngModel)]="column.vtype">
+              <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -50,25 +50,40 @@
       <div class="panel">
         <table>
           <tbody style="background-color: white;">
-            <tr *ngFor="let elemen of elemend.data;let i = index;">
+            <!--<tr *ngFor="let column of columns;let i = index;">-->
+            <tr>
               <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
               <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
                 <mat-form-field class="leftalign">
-                  <mat-select>
-                    <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
+                  <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
+                    <mat-option *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </td>
               <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
                 <mat-form-field class="leftalign">
-                  <input matInput value="Sushi">
+                  <input matInput placeholder="Default Value" [(ngModel)]="column.defaultValue">
                 </mat-form-field>
               </td>
               <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
                 <mat-form-field class="leftalign">
-                  <mat-select>
-                    <mat-option *ngFor="let col of columns" [value]="col">{{col}}</mat-option>
-                  </mat-select>
+                  <input matInput placeholder="Element Order" [(ngModel)]="column.order">
+                </mat-form-field>
+              </td>
+              
+              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+            </tr>
+            <tr>
+              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+              
+              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                <mat-form-field class="leftalign">
+                  <input matInput placeholder="Element Size" [(ngModel)]="column.size">
+                </mat-form-field>
+              </td>
+              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                <mat-form-field class="leftalign">
+                  <input matInput placeholder="Element Length" [(ngModel)]="column.length">
                 </mat-form-field>
               </td>
               <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>

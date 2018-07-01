@@ -16,20 +16,25 @@
           <tbody>
             <tr>
               <td style="padding-left: 50px;">
-                <span> Database Name</span>
+                <span> {{documentManagerService.selectedData.db.dbname}}</span>
               </td>
               <td style="padding-left: 215px;">
-                <span> View</span>
+                <span> {{documentManagerService.selectedData.table.tablename}}</span>
               </td>
               <td style="padding-left: 245px;">
-                <span> Account</span>
+                <span> {{documentManagerService.selectedData.baseName}}</span>
               </td>
               <td style="padding-left: 230px;"></td>
             </tr>
           </tbody>
         </table>
       </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px">
+        <div fxFlex.xs="100">
+          <button style="float:right;" mat-raised-button color="primary" (click)="saveform();">Save</button>
+        </div>
+      </div>
     </mat-toolbar>
   </div>
-  <app-shared></app-shared>
+  <app-shared [columns]="columnsList" [lookupsData]="lookupsData"></app-shared>
 </div>
