@@ -3,6 +3,7 @@ import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { ResponsiveTableHelpers } from '../helpers.data';
 import { Router } from '@angular/router';
 import { GeneralServiceService } from '../../service/general-service.service';
+import { DocumentManagerService } from '../services/document-manager.service';
 
 @Component({
   selector: 'app-document-manager',
@@ -10,15 +11,28 @@ import { GeneralServiceService } from '../../service/general-service.service';
   styleUrls: ['./document-manager.component.scss']
 })
 export class DocumentManagerComponent implements OnInit {
-  displayedColumns = ['basename', 'basetable', 'documenttype', 'databasename', 'action'];
+  displayedColumns = ['sno', 'basename', 'basetable', 'documenttype', 'databasename', 'action'];
   rows: Array<any> = [];
   dataSource;
   showResponsiveTableCode;
+  requestColumnData = {
+    "dbModel": "sqlModel",
+    "database": "mssql",
+    "dbname": "",
+    "tablename": ""
+  }
   @ViewChild(MatPaginator) paginator1: MatPaginator;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sorts: MatSort;
   pageLength = 0;
   pageSize = 3;
   docList;// = ResponsiveTableHelpers;
+  requestEdit = {
+    "dbModel": "sqlModel",
+    "database": "mssql",
+    "doc_name": "",
+    "doc_type": ""
+  }
   @Input() status;
   @Input() actionStatus;
   @Output() edit = new EventEmitter();
@@ -31,14 +45,18 @@ export class DocumentManagerComponent implements OnInit {
     "dbModel": "sqlModel",
     "database": "mssql"
   }
-  constructor(private router: Router, public generalService: GeneralServiceService) {
+  constructor(private router: Router, public generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
   }
 
   ngOnInit() {
+    this.documentManagerService.selectedData = {};
+    this.documentManagerService.formTypes = {};
     this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
       (repsonse => {
-        debugger;
-        this.docList = repsonse['metaDataRelatedTables'].metaDataResult;;
+        this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
+        for (var i = 0; i < this.docList.length; i++) {
+          this.docList[i].sno = i + 1;
+        }
         this.getRows();
       });
   }
@@ -48,7 +66,7 @@ export class DocumentManagerComponent implements OnInit {
       this.rows = [...this.rows, this.docList[i]];
       this.dataSource = new MatTableDataSource(this.docList);
       this.dataSource.paginator = this.paginator;
-      console.log(this.rows);
+      this.dataSource.sort = this.sorts;
     }
   }
   getRows() {
@@ -56,6 +74,7 @@ export class DocumentManagerComponent implements OnInit {
       this.rows = [...this.rows, this.docList[i]];
       this.dataSource = new MatTableDataSource(this.docList);
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sorts;
 
     }
     this.pageLength = this.docList.length;
@@ -63,6 +82,16 @@ export class DocumentManagerComponent implements OnInit {
   sortData(val) {
   }
 
+  DeleteDocument(data) {
+    this.requestData['metaJson'] = {
+      "menu": [], "master": [],
+      "details": [], "doc_name": data._fl_doc_name
+    };
+    this.generalService.deleteMetadatalist('updateExistingDocument', this.requestData).subscribe
+      (repsonse => {
+        this.ngOnInit();
+      });
+  }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -72,7 +101,37 @@ export class DocumentManagerComponent implements OnInit {
   addNewDocument() {
     this.router.navigate(['/document-manager/addnew']);
   }
-  EditDocument(){
-    this.router.navigate(['/document-manager/details']);
+  EditDocument(metaData) {
+    debugger;
+    this.documentManagerService.selectedData.selectedMeta = metaData;
+    this.requestEdit.doc_name = metaData._fl_doc_name;
+    this.requestEdit.doc_type = metaData._fl_doc_type;
+    this.documentManagerService.selectedData.db = {
+      "dbModel": "sqlModel",
+      "database": "mssql",
+      "dbname": "Incite"
+    }
+    this.documentManagerService.selectedData.table = {
+      "dbModel": "sqlModel",
+      "database": "mssql",
+      "dbname": "Incite",
+      "tablename": metaData._fl_base_table
+    }
+    this.documentManagerService.selectedData.baseName = metaData._fl_base_name;
+    this.documentManagerService.selectedData.masterData = metaData;
+    this.requestColumnData.dbname = "Incite"
+    this.requestColumnData.tablename = metaData._fl_base_table;
+    this.generalService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
+      (repsonse => {
+        this.documentManagerService.selectedData.columns = repsonse['metaDataResult'].columns;
+        this.generalService.getMetaDataList('showExistingDocument', this.requestEdit).subscribe
+          (repsonse => {
+            debugger;
+            this.router.navigate(['/document-manager/details', 'edit']);
+          });
+
+      });
+
+
   }
 }

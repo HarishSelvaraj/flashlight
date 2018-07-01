@@ -6,6 +6,13 @@ export class DocumentManagerService {
 
   formTypes: any;
   selectedData: any = {};
+  formTypesData = [
+    { value: 'S', viewValue: 'Search', tabs: false },
+    { value: 'L', viewValue: 'List', tabs: false },
+    { value: 'E', viewValue: 'Edit', tabs: true },
+    { value: 'P', viewValue: 'Portfolio', tabs: false },
+    { value: 'R', viewValue: 'Reports', tabs: false }
+  ];
     constructor() { }
 
     setDocumentFormTypes(formTypes) {
@@ -13,7 +20,7 @@ export class DocumentManagerService {
     }
 
     getDocumentFormTypes(): Observable<any> {
-        return this.formTypes.value;
+        return this.formTypes;
     }
     selectedMetaData(data) {
       this.selectedData = data;

@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter,ChangeDetectorRef } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { ResponsiveTableHelpersBody } from '../../../helpers.data';
 import { Router } from '@angular/router';
+import { DocumentManagerService } from '../../../services/document-manager.service';
+import {GeneralServiceService} from '../../../../service/general-service.service';
 
 @Component({
     selector: 'app-body',
@@ -14,6 +16,14 @@ export class BodyComponent implements OnInit {
     rows: Array<any> = [];
     showResponsiveTableCode;
     newcontents; show;
+    existingColumns: any;
+    requestExisting = {
+      "dbModel": "sqlModel",
+      "database": "mssql",
+      "doc_name": "",
+      "doc_type": ""
+    }
+    details: any = [];
     @ViewChild(MatPaginator) paginator1: MatPaginator;
     pageLength = 0;
     pageSize = 3;
@@ -60,12 +70,39 @@ export class BodyComponent implements OnInit {
     ];
 
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private detectChange: ChangeDetectorRef, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+     
     }
 
     ngOnInit() {
         this.getRows();
         this.show = false;
+        if (this.documentManagerService.selectedData.params == 'edit') {
+          this.requestExisting.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
+          this.requestExisting.doc_type = this.documentManagerService.selectedData.selectedMeta._fl_doc_type;
+          this.generalService.getExistingColums('showExistingDocument', this.requestExisting).subscribe
+            (repsonse => {
+              this.details.push(repsonse['details'])
+              this.documentManagerService.selectedData.detailsData = this.details;
+              this.existingColumns = repsonse['showSelectedData'].metaDataResult;
+              for (let key in this.existingColumns) {
+                for (let item in this.columns) {
+                  if (this.existingColumns[key]._fl_elem_name == this.columns[item].COLUMN_NAME) {
+                    debugger;
+                    this.columns[item].checked = true;
+                    this.columns[item].etype = this.existingColumns[key]._fl_elem_type
+                    this.columns[item].label = this.existingColumns[key]._fl_elem_label
+                    this.columns[item].vtype = this.existingColumns[key]._fl_elem_view
+                    this.columns[item].lookup = this.existingColumns[key]._fl_elem_ref
+                    this.columns[item].defaultValue = this.existingColumns[key]._fl_default_value
+                    this.columns[item].size = this.existingColumns[key]._fl_data_size
+                    this.columns[item].length = this.existingColumns[key]._fl_elem_len
+                    this.columns[item].order = this.existingColumns[key]._fl_show_order
+                  }
+                }
+              }
+            });
+        }
     }
     next(event) {
         this.rows = [];

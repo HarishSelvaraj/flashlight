@@ -49,7 +49,7 @@ export const appRoutes: Routes = [
   children: [
     { path: '', component: DocumentManagerComponent },
     { path: 'addnew', component: CreateDocumentComponent },
-    { path: 'details', component: DocumentDetailsComponent }
+    { path: 'details/:formType', component: DocumentDetailsComponent }
   ] },
 ];
 

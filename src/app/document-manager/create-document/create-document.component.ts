@@ -47,17 +47,13 @@ export class CreateDocumentComponent implements OnInit {
   ];
 
   //  formType = new FormControl();
-  formType = new FormControl('', [Validators.required]);
-  formTypes = [
-    { value: 'S', viewValue: 'Search', tabs: false },
-    { value: 'L', viewValue: 'List', tabs: false },
-    { value: 'E', viewValue: 'Edit', tabs: true },
-    { value: 'P', viewValue: 'Portfolio', tabs: false },
-    { value: 'R', viewValue: 'Reports', tabs: false }
-  ];
+  formType: any;
+  formTypes:any;
 
 
-  constructor(private router: Router, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { }
+  constructor(private router: Router, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { 
+    this.formTypes=this.documentManagerService.formTypesData
+  }
 
   ngOnInit() {
     let api = 'addNewDocument';
@@ -71,7 +67,7 @@ export class CreateDocumentComponent implements OnInit {
   }
 
   selectFormType() {
-   
+    debugger;
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
@@ -85,7 +81,7 @@ export class CreateDocumentComponent implements OnInit {
   }
   onChangeTable(table) {
     this.requestColumnData.dbname = this.requestTableData.dbname;
-    this.requestColumnData.tablename = table
+    this.requestColumnData.tablename = table;
     this.generalServiceService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
       (repsonse => {
         this.columnstList = repsonse['metaDataResult'].columns;
@@ -93,20 +89,20 @@ export class CreateDocumentComponent implements OnInit {
   }
   documentDetails() {
     console.log(this.formType);
-    if (this.formType['status'] == "INVALID") {
-      alert('Pls select at least one form type.');
-      return false;
-    }
+    //if (this.formType['status'] == "INVALID") {
+    //  alert('Pls select at least one form type.');
+    //  return false;
+    //}
     
     this.selectedData.db = this.requestTableData;
     this.selectedData.table = this.requestColumnData;
     this.selectedData.columns = this.columnstList;
     this.selectedData.baseName = this.baseName;
-    if (this.formType['value'].length > 0) {
-      for (let key in this.formType['value']) {
+    if (this.formType.length > 0) {
+      for (let key in this.formType) {
         this.masterData.push(Object['assign']({}, this.formRecord['master']));
-        this.masterData[key]._fl_doc_name = this.baseName +'_'+ this.formType['value'][key].viewValue;
-        this.masterData[key]._fl_doc_type = this.formType['value'][key].value;
+        this.masterData[key]._fl_doc_name = this.baseName +'_'+ this.formType[key].viewValue;
+        this.masterData[key]._fl_doc_type = this.formType[key].value;
         this.masterData[key]._fl_base_name = this.baseName;
         this.masterData[key]._fl_base_table = this.requestColumnData.tablename;
 
@@ -116,7 +112,7 @@ export class CreateDocumentComponent implements OnInit {
       this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
     }
     this.documentManagerService.selectedMetaData(this.selectedData);
-    this.router.navigate(['/document-manager/details']);
+    this.router.navigate(['/document-manager/details','create']);
   }
 
 }

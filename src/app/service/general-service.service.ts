@@ -26,5 +26,11 @@ export class GeneralServiceService {
   postMetaData(api, requestData) {
     return this.http.post(environment.apiUrl + api, requestData);
   }
+  getExistingColums(api,requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
+  deleteMetadatalist(api, requestData) {
+    return this.http.post(environment.apiUrl + api, requestData);
+  }
 
 }
