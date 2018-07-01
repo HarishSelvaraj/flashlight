@@ -66,9 +66,6 @@ export class BodyComponent implements OnInit {
     ngOnInit() {
         this.getRows();
         this.show = false;
-        console.log('lookUPS');
-        debugger;
-        console.log(this.columns);
     }
     next(event) {
         this.rows = [];
@@ -85,7 +82,6 @@ export class BodyComponent implements OnInit {
     sortData(val) {
     }
     open(data_bind) {
-        debugger;
         const acc = document.getElementsByClassName('accordion');
         let i;
         

@@ -81,10 +81,10 @@ export class DocumentDetailsComponent implements OnInit {
   constructor(private router: Router, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) { }
 
   ngOnInit() {
-    debugger;
+    
     this.generalService.getlookups('lookup', this.requestLookup).subscribe
       (repsonse => {
-        debugger;
+        
         this.lookupsData = repsonse['metaDataRelatedTables'].metaDataResult;
         console.log(this.lookupsData);
         //this.objectList = repsonse['metaDataResult'].tableList;
@@ -94,7 +94,7 @@ export class DocumentDetailsComponent implements OnInit {
 
   }
   saveform() {
-    debugger;
+    
     this.requestBody.metaJson = {
       menu: [],
       master: this.documentManagerService.selectedData.masterData,
@@ -121,7 +121,7 @@ export class DocumentDetailsComponent implements OnInit {
     }
     this.generalService.postMetaData('addNewMetaDataDocument', this.requestBody).subscribe
       (repsonse => {
-        debugger;
+        
         this.router.navigate(['/document-manager']);
         //this.objectList = repsonse['metaDataResult'].tableList;
       });

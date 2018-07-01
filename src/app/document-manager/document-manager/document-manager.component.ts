@@ -43,7 +43,6 @@ export class DocumentManagerComponent implements OnInit {
       });
   }
   next(event) {
-    debugger;
     this.rows = [];
     for (var i = 1 * event.pageIndex * event.pageSize; i < event.pageSize + event.pageIndex * event.pageSize; i++) {
       this.rows = [...this.rows, this.docList[i]];

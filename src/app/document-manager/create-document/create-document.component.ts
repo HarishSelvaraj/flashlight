@@ -76,7 +76,7 @@ export class CreateDocumentComponent implements OnInit {
   }
 
   onChangeDB(db) {
-    debugger;
+    
     this.requestTableData.dbname = db
     this.generalServiceService.getTableLlist('listTablesInDatabase', this.requestTableData).subscribe
       (repsonse => {
@@ -97,7 +97,7 @@ export class CreateDocumentComponent implements OnInit {
       alert('Pls select at least one form type.');
       return false;
     }
-    debugger;
+    
     this.selectedData.db = this.requestTableData;
     this.selectedData.table = this.requestColumnData;
     this.selectedData.columns = this.columnstList;
@@ -111,7 +111,7 @@ export class CreateDocumentComponent implements OnInit {
         this.masterData[key]._fl_base_table = this.requestColumnData.tablename;
 
       }
-      debugger;
+      
       this.selectedData.masterData = this.masterData;
       this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
     }
