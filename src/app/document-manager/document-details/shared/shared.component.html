@@ -27,7 +27,7 @@
         <ng-template mat-tab-label>
           HEADER
         </ng-template>
-        <app-header></app-header>
+        <app-header [headers]="formType.headers"></app-header>
       </mat-tab>
       <mat-tab *ngIf="formType.tabs" class="color">
         <ng-template mat-tab-label>

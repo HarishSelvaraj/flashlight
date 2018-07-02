@@ -8,15 +8,18 @@ import { DocumentManagerService } from '../../services/document-manager.service'
 })
 export class SharedComponent implements OnInit {
 
-  formTypesSelected : any;
+  formTypesSelected: any;
   @Input() columns;
   @Input() lookupsData;
-  constructor(private documentManagerService : DocumentManagerService) { }
+  @Input() shareddata;
+  @Input() headers;
+  constructor(private documentManagerService: DocumentManagerService) { }
 
   ngOnInit() {
-    
     this.formTypesSelected = this.documentManagerService.getDocumentFormTypes();
     for (let key in this.formTypesSelected) {
+      this.formTypesSelected[key].shareddata = {};
+      this.formTypesSelected[key].headers = [];
       this.formTypesSelected[key].columns = JSON.parse(JSON.stringify(this.columns));// Object['assign']([], this.columns);
     }
     //this
@@ -24,6 +27,8 @@ export class SharedComponent implements OnInit {
 
   saveform() {
     this.columns;
+    this.shareddata;
+    this.headers;
   }
 
 }

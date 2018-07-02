@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResponsiveTableHelpers } from '../../helpers.data';
 import { DocumentManagerService } from '../../services/document-manager.service';
-import {GeneralServiceService} from '../../../service/general-service.service';
+import { GeneralServiceService } from '../../../service/general-service.service';
 
 @Component({
   selector: 'app-document-details',
@@ -14,6 +14,8 @@ export class DocumentDetailsComponent implements OnInit {
   formTypesselected: any;
   lookupsData: any;
   columnsList: any;
+  headersList: any;
+  sharedList: any;
   formType: any = [];
   metaInfo: any;
   existingColumns: any;
@@ -78,20 +80,20 @@ export class DocumentDetailsComponent implements OnInit {
       formtype: "Document Type 1",
       action: '<i class="nb-edit"></i>'
     }, {
-        id: "02",
-        basename: "Base Name 2",
-        database: "Database 2",
-        object: "View",
-        formtype: "Document Type 2",
-        action: '<i class="nb-edit"></i>'
-      }, {
-        id: "03",
-        basename: "Base Name 3",
-        database: "Database 3",
-        object: "Table Name",
-        formtype: "Document Type 3",
-        action: '<i class="nb-edit"></i>'
-      }]
+      id: "02",
+      basename: "Base Name 2",
+      database: "Database 2",
+      object: "View",
+      formtype: "Document Type 2",
+      action: '<i class="nb-edit"></i>'
+    }, {
+      id: "03",
+      basename: "Base Name 3",
+      database: "Database 3",
+      object: "Table Name",
+      formtype: "Document Type 3",
+      action: '<i class="nb-edit"></i>'
+    }]
   }
 
   constructor(private router: Router, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
@@ -143,6 +145,8 @@ export class DocumentDetailsComponent implements OnInit {
 
   createInitData() {
     this.columnsList = this.documentManagerService.selectedData.columns;
+    this.headersList = this.documentManagerService.selectedData.headers;
+    this.sharedList = this.documentManagerService.selectedData.shareddata;
     this.formTypesselected = this.documentManagerService.getDocumentFormTypes();
   }
 
@@ -194,6 +198,33 @@ export class DocumentDetailsComponent implements OnInit {
       }
     }
 
+    for (let key in this.formTypesselected) {
+      for (let item in this.formTypesselected[key].headers) {
+        if (item == "header") {
+          this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_obj_type = 0;
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].headers.header ? this.formTypesselected[key].headers.header : "";;
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_name = "HDR";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
+
+        } else if (item == "column") {
+        } else {
+          this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_type = this.formTypesselected[key].headers[item]._fl_elem_label ? this.formTypesselected[key].headers[item]._fl_elem_label : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].headers[item]._fl_elem_ref ? this.formTypesselected[key].headers[item]._fl_elem_ref : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].headers[item]._fl_elem_type ? this.formTypesselected[key].headers[item]._fl_elem_type : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_obj_type = 0;
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
+        }
+      }
+    }
+    for (let key in this.formTypesselected) {
+      this.requestBody.metaJson.master[key]._fl_app_tmpl = this.formTypesselected[key].shareddata._fl_app_tmpl ? this.formTypesselected[key].shareddata._fl_app_tmpl : "";
+      this.requestBody.metaJson.master[key]._fl_ux_tmpl = this.formTypesselected[key].shareddata._fl_ux_tmpl ? this.formTypesselected[key].shareddata._fl_ux_tmpl : "";
+      // this.requestBody.metaJson.master[key]._fl_elem_ref = this.formTypesselected[key].shareddata._fl_elem_type ? this.formTypesselected[key].shareddata._fl_elem_type : "";
+    }
     //}
 
 
