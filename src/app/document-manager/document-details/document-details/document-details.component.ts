@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResponsiveTableHelpers } from '../../helpers.data';
 import { DocumentManagerService } from '../../services/document-manager.service';
@@ -129,10 +129,10 @@ export class DocumentDetailsComponent implements OnInit {
         //          this.columnsList[item].size = this.existingColumns[key]._fl_data_size
         //          this.columnsList[item].length = this.existingColumns[key]._fl_elem_len
         //          this.columnsList[item].order = this.existingColumns[key]._fl_show_order
-                  
+
         //        }
         //      }
-              
+
         //    }
         //    this.detectChange.detectChanges();
         //    this.columnsList
@@ -169,33 +169,34 @@ export class DocumentDetailsComponent implements OnInit {
     if (this.documentManagerService.selectedData.params == 'edit') {
 
       this.requestBody.metaJson.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
-      
+
 
     }
     //else {
 
-      for (let key in this.formTypesselected) {
-        for (let item in this.formTypesselected[key].columns) {
-          if (this.formTypesselected[key].columns[item].checked) {
-            this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
-            this.requestBody.metaJson.details[item]._fl_default_value = this.formTypesselected[key].columns[item].defaultValue ? this.formTypesselected[key].columns[item].defaultValue : "";
-            this.requestBody.metaJson.details[item]._fl_elem_type = this.formTypesselected[key].columns[item].etype ? this.formTypesselected[key].columns[item].etype : "";
-            this.requestBody.metaJson.details[item]._fl_elem_label = this.formTypesselected[key].columns[item].label ? this.formTypesselected[key].columns[item].label : "";
-            this.requestBody.metaJson.details[item]._fl_elem_view = this.formTypesselected[key].columns[item].vtype ? this.formTypesselected[key].columns[item].vtype : "";
-            this.requestBody.metaJson.details[item]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
-            this.requestBody.metaJson.details[item]._fl_elem_len = this.formTypesselected[key].columns[item].length ? this.formTypesselected[key].columns[item].length : "";
-            this.requestBody.metaJson.details[item]._fl_data_size = this.formTypesselected[key].columns[item].size ? this.formTypesselected[key].columns[item].size : "";
-            this.requestBody.metaJson.details[item]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
-            this.requestBody.metaJson.details[item]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
-            this.requestBody.metaJson.details[item]._fl_elem_name = this.formTypesselected[key].columns[item].COLUMN_NAME ? this.formTypesselected[key].columns[item].COLUMN_NAME : "";
-            this.requestBody.metaJson.details[item]._fl_obj_type = 3;
-          }
+    for (let key in this.formTypesselected) {
+      for (let item in this.formTypesselected[key].columns) {
+        if (this.formTypesselected[key].columns[item].checked) {
+          this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
+
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_default_value = this.formTypesselected[key].columns[item].defaultValue ? this.formTypesselected[key].columns[item].defaultValue : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_type = this.formTypesselected[key].columns[item].etype ? this.formTypesselected[key].columns[item].etype : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].columns[item].label ? this.formTypesselected[key].columns[item].label : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_view = this.formTypesselected[key].columns[item].vtype ? this.formTypesselected[key].columns[item].vtype : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_len = this.formTypesselected[key].columns[item].length ? this.formTypesselected[key].columns[item].length : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_data_size = this.formTypesselected[key].columns[item].size ? this.formTypesselected[key].columns[item].size : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_name = this.formTypesselected[key].columns[item].COLUMN_NAME ? this.formTypesselected[key].columns[item].COLUMN_NAME : "";
+          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_obj_type = 3;
         }
       }
+    }
 
     //}
 
-    
+
     this.generalService.postMetaData('addNewMetaDataDocument', this.requestBody).subscribe
       (repsonse => {
 
