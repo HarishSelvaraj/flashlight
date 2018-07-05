@@ -35,12 +35,12 @@ table tr {
 }
 
 table tr:nth-child(odd) td {
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 table tr:nth-child(even) td {
   background: rgba(145, 151, 187, 0.34);
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 /deep/ .mat-sort-header-container {
@@ -51,7 +51,7 @@ table th,
 table td {
   padding: .625em;
   text-align: center;
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 table th {

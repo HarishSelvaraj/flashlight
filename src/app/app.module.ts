@@ -5,6 +5,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { MasterModule } from './master/master.module';
 import { ReportsComponent } from './reports/reports.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import {ToastModule} from 'ng2-toastr/ng2-toastr';
+// import {BootstrapGrowlModule, BootstrapGrowlComponent, BootstrapGrowlService} from "ng2-bootstrap-growl";
 
 @NgModule({
   declarations: [
@@ -15,7 +18,9 @@ import { ReportsComponent } from './reports/reports.component';
     RouterModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MasterModule
+    MasterModule,
+    NgxSpinnerModule,
+    ToastModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
