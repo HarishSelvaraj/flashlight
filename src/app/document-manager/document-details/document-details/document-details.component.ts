@@ -17,6 +17,7 @@ export class DocumentDetailsComponent implements OnInit {
   formType: any = [];
   metaInfo: any;
   existingColumns: any;
+  reqAPI: any;
   requestExisting = {
     "dbModel": "sqlModel",
     "database": "mssql",
@@ -196,8 +197,12 @@ export class DocumentDetailsComponent implements OnInit {
 
     //}
 
-
-    this.generalService.postMetaData('addNewMetaDataDocument', this.requestBody).subscribe
+    if (this.documentManagerService.selectedData.params == 'edit') {
+      this.reqAPI = 'updateExistingDocument'
+    } else {
+      this.reqAPI = 'addNewMetaDataDocument'
+    }
+    this.generalService.postMetaData(this.reqAPI, this.requestBody).subscribe
       (repsonse => {
 
         this.router.navigate(['/document-manager']);
