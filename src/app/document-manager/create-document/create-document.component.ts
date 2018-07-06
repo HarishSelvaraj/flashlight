@@ -67,7 +67,7 @@ export class CreateDocumentComponent implements OnInit {
   }
 
   selectFormType() {
-    debugger;
+    //debugger;
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
