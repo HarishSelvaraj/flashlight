@@ -109,7 +109,7 @@ export class DocumentDetailsComponent implements OnInit {
             this.documentManagerService.setDocumentFormTypes(this.formType);
           }
         }
-        debugger;
+        //debugger;
         this.documentManagerService.selectedData.params = params['formType'];
         this.requestExisting.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
         this.requestExisting.doc_type = this.documentManagerService.selectedData.selectedMeta._fl_doc_type;
@@ -150,9 +150,8 @@ export class DocumentDetailsComponent implements OnInit {
 
     this.generalService.getlookups('lookup', this.requestLookup).subscribe
       (repsonse => {
-
         this.lookupsData = repsonse['metaDataRelatedTables'].metaDataResult;
-      }); debugger;
+      });// debugger;
     this.createInitData();
   }
 
@@ -167,10 +166,7 @@ export class DocumentDetailsComponent implements OnInit {
     };
 
     if (this.documentManagerService.selectedData.params == 'edit') {
-
       this.requestBody.metaJson.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
-
-
     }
     //else {
 
@@ -199,7 +195,6 @@ export class DocumentDetailsComponent implements OnInit {
 
     this.generalService.postMetaData('addNewMetaDataDocument', this.requestBody).subscribe
       (repsonse => {
-
         this.router.navigate(['/document-manager']);
         //this.objectList = repsonse['metaDataResult'].tableList;
       });

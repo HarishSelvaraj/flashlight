@@ -4,6 +4,7 @@ import { ResponsiveTableHelpers } from '../helpers.data';
 import { Router } from '@angular/router';
 import { GeneralServiceService } from '../../service/general-service.service';
 import { DocumentManagerService } from '../services/document-manager.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-document-manager',
@@ -45,14 +46,16 @@ export class DocumentManagerComponent implements OnInit {
     "dbModel": "sqlModel",
     "database": "mssql"
   }
-  constructor(private router: Router, public generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+  constructor(private router: Router,private loader: NgxSpinnerService, public generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
   }
 
   ngOnInit() {
+    this.loader.show();
     this.documentManagerService.selectedData = {};
     this.documentManagerService.formTypes = {};
     this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
       (repsonse => {
+        this.loader.hide();
         this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
         for (var i = 0; i < this.docList.length; i++) {
           this.docList[i].sno = i + 1;
@@ -102,7 +105,7 @@ export class DocumentManagerComponent implements OnInit {
     this.router.navigate(['/document-manager/addnew']);
   }
   EditDocument(metaData) {
-    debugger;
+   // debugger;
     this.documentManagerService.selectedData.selectedMeta = metaData;
     this.requestEdit.doc_name = metaData._fl_doc_name;
     this.requestEdit.doc_type = metaData._fl_doc_type;
@@ -126,7 +129,7 @@ export class DocumentManagerComponent implements OnInit {
         this.documentManagerService.selectedData.columns = repsonse['metaDataResult'].columns;
         this.generalService.getMetaDataList('showExistingDocument', this.requestEdit).subscribe
           (repsonse => {
-            debugger;
+           // debugger;
             this.router.navigate(['/document-manager/details', 'edit']);
           });
 
