@@ -106,6 +106,7 @@ export class DocumentManagerComponent implements OnInit {
   }
   EditDocument(metaData) {
    // debugger;
+    delete metaData['sno'];
     this.documentManagerService.selectedData.selectedMeta = metaData;
     this.requestEdit.doc_name = metaData._fl_doc_name;
     this.requestEdit.doc_type = metaData._fl_doc_type;
@@ -121,7 +122,7 @@ export class DocumentManagerComponent implements OnInit {
       "tablename": metaData._fl_base_table
     }
     this.documentManagerService.selectedData.baseName = metaData._fl_base_name;
-    this.documentManagerService.selectedData.masterData = metaData;
+    this.documentManagerService.selectedData.masterData =[ metaData];
     this.requestColumnData.dbname = "Incite"
     this.requestColumnData.tablename = metaData._fl_base_table;
     this.generalService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe

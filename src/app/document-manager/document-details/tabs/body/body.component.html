@@ -1,138 +1,295 @@
 <div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxFlexFill style="padding: 20px;">
 
   <div fxLayout="column" style="background-color: white; padding: 10px;" fxLayoutAlign="space-between stretch" fxLayoutGap="5px"
-    fxFlexFill>
+       fxFlexFill>
 
     <!-- <mat-toolbar>
           <h3 style="margin-left: 16px;" class="mat-heading"> Document List </h3>
           <span class="spacer"></span>
           <button style="margin-right: 16px;" (click)="addNewDocument()" mat-raised-button color="primary">Add New</button>
       </mat-toolbar> -->
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">FIELD</th>
-          <th scope="col">ELEMENT TYPE</th>
-          <th scope="col">LABEL</th>
-          <th scope="col">VIEW TYPE</th>
-          <th></th>
-        </tr>
-      </thead>
-    </table>
-    <div *ngFor="let column of columns; let i = index;">
-      <button  fxLayout="row" fxLayoutAlign="end center" class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
-        <div fxFlex.xs="50" fxFlex.lg="12.5" fxFlex.md="12.5" fxFlex.sm="25">
-          <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent()">{{column.COLUMN_NAME}}</mat-checkbox>
-        </div>
-        <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field (click)="stopEvent()">
-            <mat-select placeholder="Element Type" [(ngModel)]="column.etype">
-              <mat-option *ngFor="let etype of elementType" [value]="etype">{{etype}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field (click)="stopEvent()">
-            <input matInput placeholder="LABEL" [(ngModel)]="column.label">
-          </mat-form-field>
-        </div>
-        <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
-          <mat-form-field (click)="stopEvent()">
-            <mat-select placeholder="View Type" [(ngModel)]="column.vtype">
-              <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="end center" >
-          <mat-icon (click)="stopEvent();cloneRecord(column);">file_copy</mat-icon>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="end center" *ngIf="column.cloneIndication">
-          <button mat-icon-button (click)="stopEvent();removeClonedColumn(column,i)">
-            <mat-icon class="space">delete</mat-icon>
-          </button>
-        </div>
+    {{isPrimaryTable}}
+    <div *ngIf="isPrimaryTable=='edit'">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">FIELD</th>
+            <th scope="col">ELEMENT TYPE</th>
+            <th scope="col">LABEL</th>
+            <th scope="col">VIEW TYPE</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+      <div *ngFor="let column of existingColumns; let i = index;">
 
-      </button>
-      <div class="panel">
-        <table>
-          <tbody style="background-color: white;">
-            <!--<tr *ngFor="let column of columns;let i = index;">-->
-            <tr>
-              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <!-- <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
-                    <mat-optionste *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
-                  </mat-select> -->
-                  <input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                      {{option}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Default Value" [(ngModel)]="column.defaultValue">
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Element Order" [(ngModel)]="column.order">
-                </mat-form-field>
-              </td>
+        <button fxLayout="row" fxLayoutAlign="end center" class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
+          <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
+            <i class="material-icons" (click)="stopEvent();cloneRecord(column,'add',i+1);">add_box</i>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
+            <mat-icon (click)="stopEvent();cloneRecord(column,'clone',i+1);">file_copy</mat-icon>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="15" fxFlex.md="15" fxFlex.sm="15" *ngIf="!column.cloneIndication">
+            <mat-checkbox [(ngModel)]="column.checked" class="" (change)="onChangedCheckBox(column)" (click)="stopEvent();">{{column._fl_elem_name}}</mat-checkbox>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25" *ngIf="column.cloneIndication">
 
-              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
-            </tr>
-            <tr>
-              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+            <mat-checkbox [(ngModel)]="column.checked" class="" (change)="onChangedCheckBox(column)" (click)="stopEvent();"></mat-checkbox>
+            <mat-form-field (click)="stopEvent()" style="width:80%">
+              <input matInput [(ngModel)]="column._fl_elem_name" (change)="onChangeColumn(column)">
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <mat-select placeholder="Element Type" (change)="onChangeEtype($event.value,column)" [(ngModel)]="column._fl_elem_type">
+                <mat-option *ngFor="let etype of elementType" [value]="etype">{{etype}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <input matInput placeholder="LABEL" [(ngModel)]="column._fl_elem_label">
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <mat-select placeholder="View Type" [(ngModel)]="column._fl_elem_view" [disabled]="!column.checked">
+                <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Element Size" [(ngModel)]="column.elmtSize">
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Element Length" [(ngModel)]="column.elmtLength">
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <mat-select placeholder="Show In" [(ngModel)]="column.showIn">
-                    <mat-option *ngFor="let showIn of showInValues" [value]="showIn.value">{{showIn.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </td>
-              <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
-            </tr>
-            <tr>
-              <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+          <div fxLayout="row" fxLayoutAlign="end center">
+            <button mat-icon-button (click)="stopEvent();removeClonedColumn(column,i)">
+              <mat-icon class="space">delete</mat-icon>
+            </button>
+          </div>
 
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Table Reference" [(ngModel)]="column.tblReference">
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <input matInput placeholder="Element Data" [(ngModel)]="column.elmtData">
-                </mat-form-field>
-              </td>
-              <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
-                <mat-form-field class="leftalign">
-                  <mat-select placeholder="Show For" [(ngModel)]="column.showFor">
-                    <mat-option *ngFor="let showFor of showForValues" [value]="showFor.value">{{showFor.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </td>
-              <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
-            </tr>
-          </tbody>
-        </table>
+        </button>
+        <div class="panel">
+          <table>
+            <tbody style="background-color: white;">
+              <!--<tr *ngFor="let column of columns;let i = index;">-->
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <!-- <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
+                  <mat-optionste *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
+                </mat-select> -->
+                    <input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Default Value" [(ngModel)]="column._fl_default_value">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Order" [(ngModel)]="column._fl_show_order">
+                  </mat-form-field>
+                </td>
+
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+              </tr>
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Size" [(ngModel)]="column._fl_data_size">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Length" [(ngModel)]="column._fl_elem_len">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Show In" [(ngModel)]="column._fl_show_in">
+                      <mat-option *ngFor="let showIn of showInValues" [value]="showIn.value">{{showIn.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
+              </tr>
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Table Reference">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Element Data" (change)="onChangeEtype($event.value,column)" [(ngModel)]="column._fl_elem_data">
+                      <mat-option *ngFor="let edata of elementData" [value]="edata">{{edata}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Show For" [(ngModel)]="column._fl_show_for">
+                      <mat-option *ngFor="let showFor of showForValues" [value]="showFor.value">{{showFor.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+    <div *ngIf="isPrimaryTable=='create'">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">FIELD</th>
+            <th scope="col">ELEMENT TYPE</th>
+            <th scope="col">LABEL</th>
+            <th scope="col">VIEW TYPE</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+      <div *ngFor="let column of columns; let i = index;">
 
+        <button fxLayout="row" fxLayoutAlign="end center" class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
+          <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
+            <i class="material-icons" (click)="stopEvent();cloneRecord(column,'add',i+1);">add_box</i>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
+            <mat-icon (click)="stopEvent();cloneRecord(column,'clone',i+1);">file_copy</mat-icon>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="15" fxFlex.md="15" fxFlex.sm="15" *ngIf="!column.cloneIndication">
+            <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent()">{{column.COLUMN_NAME}}</mat-checkbox>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25" *ngIf="column.cloneIndication">
+
+            <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent()"></mat-checkbox>
+            <mat-form-field (click)="stopEvent()" style="width:80%">
+              <input matInput [(ngModel)]="column.COLUMN_NAME" (change)="onChangeColumn(column)">
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <mat-select placeholder="Element Type" (change)="onChangeEtype($event.value,column)" [(ngModel)]="column.etype">
+                <mat-option *ngFor="let etype of elementType" [value]="etype">{{etype}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <input matInput placeholder="LABEL" [(ngModel)]="column.label">
+            </mat-form-field>
+          </div>
+          <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
+            <mat-form-field (click)="stopEvent()">
+              <mat-select placeholder="View Type" [(ngModel)]="column.vtype">
+                <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="end center" *ngIf="column.cloneIndication">
+            <button mat-icon-button (click)="stopEvent();removeClonedColumn(column,i)">
+              <mat-icon class="space">delete</mat-icon>
+            </button>
+          </div>
+
+        </button>
+        <div class="panel">
+          <table>
+            <tbody style="background-color: white;">
+              <!--<tr *ngFor="let column of columns;let i = index;">-->
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <!-- <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
+                    <mat-optionste *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
+                  </mat-select> -->
+                    <input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Default Value" [(ngModel)]="column.defaultValue">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Order" [(ngModel)]="column.order">
+                  </mat-form-field>
+                </td>
+
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+              </tr>
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Size" [(ngModel)]="column.elmtSize">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Element Length" [(ngModel)]="column.elmtLength">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Show In" [(ngModel)]="column.showIn">
+                      <mat-option *ngFor="let showIn of showInValues" [value]="showIn.value">{{showIn.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
+              </tr>
+              <tr>
+                <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td>
+
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <input matInput placeholder="Table Reference" [(ngModel)]="column.tblReference">
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Element Data" (change)="onChangeEtype($event.value,column)" [(ngModel)]="column.elmtData">
+                      <mat-option *ngFor="let edata of elementData" [value]="edata">{{edata}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
+                  <mat-form-field class="leftalign">
+                    <mat-select placeholder="Show For" [(ngModel)]="column.showFor">
+                      <mat-option *ngFor="let showFor of showForValues" [value]="showFor.value">{{showFor.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <!-- <td fxFlex.xs="50" fxFlex.lg="13" fxFlex.md="13" fxFlex.sm="25" class="leftalign"></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

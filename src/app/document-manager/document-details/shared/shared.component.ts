@@ -18,8 +18,9 @@ export class SharedComponent implements OnInit {
   numberDataTypes = ['bit', 'tinyint', 'smallint', 'int', 'bigint', 'decimal', 'numeric',
     'smallmoney', 'money', 'float', 'real'];
 
-  dateDataTypes = ['datetime', 'datetime2', 'smalldatetime', 'date',
-    'time', 'datetimeoffset', 'timestamp'];
+  dateTimeDataTypes = ['datetime', 'datetime2', 'smalldatetime', 'datetimeoffset'];
+  dateDataTypes = ['date'];
+  timeDataTypes = ['time', 'timestamp'];
 
   constructor(private documentManagerService: DocumentManagerService) { }
 
@@ -27,22 +28,43 @@ export class SharedComponent implements OnInit {
     console.log('i am in shared componenet');
     console.log(this.columns);
     // this.dataSource.renderedData.forEach(data => this.selection.select(data.id));
-    this.columns.forEach(col => {
+    this.columns.forEach((col, index) => {
+      debugger;
       col.checked = true;
+      col.order = index + 1;
+      col.elmtLength = col.CHARACTER_MAXIMUM_LENGTH ? col.CHARACTER_MAXIMUM_LENGTH : "";
+      col.elmtSize = "100";
       if (this.textDataTypes.includes(col.DATA_TYPE)) {
         col.etype = 'TEXT';
       } else if (this.numberDataTypes.includes(col.DATA_TYPE)) {
         col.etype = 'NUMBER';
       } else if (this.dateDataTypes.includes(col.DATA_TYPE)) {
         col.etype = 'DATE';
+      } else if (this.dateTimeDataTypes.includes(col.DATA_TYPE)) {
+        col.etype = 'DATETIME';
+      } else if (this.timeDataTypes.includes(col.DATA_TYPE)) {
+        col.etype = 'TIME';
+      }
+      if (this.numberDataTypes.includes(col.DATA_TYPE)) {
+        col.elmtData = 'NUMBER';
+      } else {
+        col.elmtData = 'TEXT';
+      }
+      if ((col.etype == 'DATE' || col.etype == 'DATETIME') && (col.elmtLength == "" || !col.elmtLength)) {
+        col.elmtLength = 20;
       }
 
-      // replace underscore and display it in label COLUMN_NAME
-      col.label = col.COLUMN_NAME.replace("_", " ");
 
+      // replace underscore and display it in label COLUMN_NAME
+      col.label = col.COLUMN_NAME.replace(/_/g, " ");
+      col.label = col.label.replace(" ", "");
       // load body table with default view type as Optional
       if (col.CONSTRAINT_NAME != null) {
         col.vtype = 'A';
+      } else if (col.IS_NULLABLE == "YES") {
+        col.vtype = 'O';
+      } else if (col.IS_NULLABLE == "NO") {
+        col.vtype = 'R';
       } else {
         col.vtype = 'O';
       }
