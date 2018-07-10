@@ -102,10 +102,12 @@ export class DocumentManagerComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
   addNewDocument() {
+    this.loader.show();
     this.router.navigate(['/document-manager/addnew']);
   }
   EditDocument(metaData) {
    // debugger;
+    this.loader.show();
     delete metaData['sno'];
     this.documentManagerService.selectedData.selectedMeta = metaData;
     this.requestEdit.doc_name = metaData._fl_doc_name;
@@ -130,7 +132,7 @@ export class DocumentManagerComponent implements OnInit {
         this.documentManagerService.selectedData.columns = repsonse['metaDataResult'].columns;
         this.generalService.getMetaDataList('showExistingDocument', this.requestEdit).subscribe
           (repsonse => {
-           // debugger;
+            this.loader.hide();
             this.router.navigate(['/document-manager/details', 'edit']);
           });
 

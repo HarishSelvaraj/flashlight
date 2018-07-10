@@ -23,13 +23,56 @@ export class SharedComponent implements OnInit {
   timeDataTypes = ['time', 'timestamp'];
 
   constructor(private documentManagerService: DocumentManagerService) { }
-
+  existingColumns = [];
   ngOnInit() {
     console.log('i am in shared componenet');
-    console.log(this.columns);
+   
+    //for (let key in this.columns) {
+    //  debugger;
+    //  this.existingColumns.push(JSON.parse(JSON.stringify(this.documentManagerService.selectedData.detailsData)));
+    //  this.existingColumns[this.existingColumns.length - 1].checked = true;
+    //  this.existingColumns[this.existingColumns.length - 1]._fl_elem_len = this.columns[key].CHARACTER_MAXIMUM_LENGTH;
+    //  this.existingColumns[this.existingColumns.length - 1]._fl_data_size = "100";
+    //  if (this.textDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_type = 'TEXT';
+    //  } else if (this.numberDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_type = 'NUMBER';
+    //  } else if (this.dateDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_type = 'DATE';
+    //  } else if (this.dateTimeDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_type = 'DATETIME';
+    //  } else if (this.timeDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_type = 'TIME';
+    //  }
+    //  if (this.numberDataTypes.includes(this.columns[key].DATA_TYPE)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_data = 'NUMBER';
+    //  } else {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_data = 'TEXT';
+    //  }
+    //  if ((this.existingColumns[this.existingColumns.length - 1]._fl_elem_type == 'DATE' || this.existingColumns[this.existingColumns.length - 1]._fl_elem_type == 'DATETIME') && (this.existingColumns[this.existingColumns.length - 1]._fl_elem_len == "" || !this.existingColumns[this.existingColumns.length - 1]._fl_elem_len)) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_len = 20;
+    //  }  
+    //  this.existingColumns[this.existingColumns.length - 1]._fl_elem_label = this.columns[key].COLUMN_NAME.replace(/_/g, " ");
+    //  this.existingColumns[this.existingColumns.length - 1]._fl_elem_label = this.existingColumns[this.existingColumns.length - 1]._fl_elem_label.replace(" ", "");    
+    //  if (this.columns[key].CONSTRAINT_NAME != null) {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_view = 'A';
+    //  } else if (this.columns[key].IS_NULLABLE == "YES") {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_view = 'O';
+    //  } else if (this.columns[key].IS_NULLABLE == "NO") {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_view = 'R';
+    //  } else {
+    //    this.existingColumns[this.existingColumns.length - 1]._fl_elem_view = 'O';
+    //  }
+    //}
+    //this.formTypesSelected = this.documentManagerService.getDocumentFormTypes();
+    //for (let key in this.formTypesSelected) {
+    //  this.formTypesSelected[key].existingColumns = JSON.parse(JSON.stringify(this.existingColumns));// Object['assign']([], this.columns);
+    //}
+    //debugger;
+    //this.documentManagerService.selectedData;
     // this.dataSource.renderedData.forEach(data => this.selection.select(data.id));
     this.columns.forEach((col, index) => {
-      debugger;
+     
       col.checked = true;
       col.order = index + 1;
       col.elmtLength = col.CHARACTER_MAXIMUM_LENGTH ? col.CHARACTER_MAXIMUM_LENGTH : "";

@@ -8,7 +8,7 @@
           <span class="spacer"></span>
           <button style="margin-right: 16px;" (click)="addNewDocument()" mat-raised-button color="primary">Add New</button>
       </mat-toolbar> -->
-    {{isPrimaryTable}}
+
     <div *ngIf="isPrimaryTable=='edit'">
       <table>
         <thead>
@@ -25,10 +25,10 @@
 
         <button fxLayout="row" fxLayoutAlign="end center" class="accordion" (click)="open(column.COLUMN_NAME)" style="align-items: center;">
           <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
-            <i class="material-icons" (click)="stopEvent();cloneRecord(column,'add',i+1);">add_box</i>
+            <i class="material-icons" (click)="stopEvent();editCloneRecord(column,'add',i+1);">add_box</i>
           </div>
           <div fxFlex.xs="50" fxFlex.lg="5" fxFlex.md="5" fxFlex.sm="5">
-            <mat-icon (click)="stopEvent();cloneRecord(column,'clone',i+1);">file_copy</mat-icon>
+            <mat-icon (click)="stopEvent();editCloneRecord(column,'clone',i+1);">file_copy</mat-icon>
           </div>
           <div fxFlex.xs="50" fxFlex.lg="15" fxFlex.md="15" fxFlex.sm="15" *ngIf="!column.cloneIndication">
             <mat-checkbox [(ngModel)]="column.checked" class="" (change)="onChangedCheckBox(column)" (click)="stopEvent();">{{column._fl_elem_name}}</mat-checkbox>
@@ -78,12 +78,13 @@
                     <!-- <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
                   <mat-optionste *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
                 </mat-select> -->
-                    <input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
+                    <input matInput placeholder="LookUps" [(ngModel)]="column._fl_elem_ref">
+                    <!--<input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete">
                       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option}}
                       </mat-option>
-                    </mat-autocomplete>
+                    </mat-autocomplete>-->
                   </mat-form-field>
                 </td>
                 <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">
@@ -219,12 +220,13 @@
                     <!-- <mat-select placeholder="LookUps" [(ngModel)]="column.lookup">
                     <mat-optionste *ngFor="let lookup of lookupsData" [value]="lookup._fl_code_name">{{lookup._fl_code_name}}</mat-option>
                   </mat-select> -->
-                    <input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
+                    <input matInput placeholder="LookUps" [(ngModel)]="column.lookup">
+                    <!--<input type="text" placeholder="LookUps" matInput [formControl]="lookupControl" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete">
                       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option}}
                       </mat-option>
-                    </mat-autocomplete>
+                    </mat-autocomplete>-->
                   </mat-form-field>
                 </td>
                 <td scope="col" fxFlex.xs="50" fxFlex.lg="24" fxFlex.md="25" fxFlex.sm="25">

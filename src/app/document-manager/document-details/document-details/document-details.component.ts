@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ResponsiveTableHelpers } from '../../helpers.data';
 import { DocumentManagerService } from '../../services/document-manager.service';
 import {GeneralServiceService} from '../../../service/general-service.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-document-details',
@@ -94,7 +95,8 @@ export class DocumentDetailsComponent implements OnInit {
       }]
   }
 
-  constructor(private router: Router, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+  constructor(private router: Router, private loader: NgxSpinnerService, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+    this.loader.hide();
     this.route.params.subscribe(params => {
 
       //this.formType = params['formType'];
@@ -148,9 +150,10 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loader.show();
     this.generalService.getlookups('lookup', this.requestLookup).subscribe
       (repsonse => {
+        this.loader.hide();
         this.lookupsData = repsonse['metaDataRelatedTables'].metaDataResult;
       });// debugger;
     this.createInitData();
@@ -159,6 +162,7 @@ export class DocumentDetailsComponent implements OnInit {
 
 
   saveform() {
+    this.loader.show();
     let apiUrl = "addNewMetaDataDocument";
     this.requestBody.metaJson = {
       menu: [],
@@ -176,15 +180,14 @@ export class DocumentDetailsComponent implements OnInit {
         delete this.documentManagerService.selectedData.existingColumns[i].checked;
       }
       this.requestBody.metaJson.details = this.documentManagerService.selectedData.existingColumns;
-      debugger;
+      
     }
     else {
-      debugger;
+    
       for (let key in this.formTypesselected) {
         for (let item in this.formTypesselected[key].columns) {
           if (this.formTypesselected[key].columns[item].checked) {
             this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
-
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_default_value = this.formTypesselected[key].columns[item].defaultValue ? this.formTypesselected[key].columns[item].defaultValue : "";
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_type = this.formTypesselected[key].columns[item].etype ? this.formTypesselected[key].columns[item].etype : "";
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].columns[item].label ? this.formTypesselected[key].columns[item].label : "";
@@ -200,6 +203,7 @@ export class DocumentDetailsComponent implements OnInit {
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_show_for = this.formTypesselected[key].columns[item].showFor ? this.formTypesselected[key].columns[item].showFor : "";
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_data = this.formTypesselected[key].columns[item].elmtData ? this.formTypesselected[key].columns[item].elmtData : "";
             this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_show_order = this.formTypesselected[key].columns[item].order ? this.formTypesselected[key].columns[item].order : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
           }
         }
       }
@@ -209,12 +213,14 @@ export class DocumentDetailsComponent implements OnInit {
     debugger;
     this.generalService.postMetaData(apiUrl, this.requestBody).subscribe
       (repsonse => {
+        this.loader.hide();
         this.router.navigate(['/document-manager']);
         //this.objectList = repsonse['metaDataResult'].tableList;
       });
     this.requestBody;
   }
   editDocument() {
+    this.loader.show();
     this.router.navigate(['/document-manager/addnew']);
   }
 
