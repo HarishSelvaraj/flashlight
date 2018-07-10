@@ -54,7 +54,7 @@ export class CreateDocumentComponent implements OnInit {
 
   constructor(private router: Router,private loader: NgxSpinnerService, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { 
     this.formTypes = this.documentManagerService.formTypesData;
-    this.loader.hide();
+    // this.loader.hide();
   }
 
   ngOnInit() {
@@ -95,6 +95,8 @@ export class CreateDocumentComponent implements OnInit {
       });
   }
   documentDetails() {
+    // alert('1');
+    this.loader.show();
     console.log(this.formType);
     //if (this.formType['status'] == "INVALID") {
     //  alert('Pls select at least one form type.');
@@ -119,7 +121,7 @@ export class CreateDocumentComponent implements OnInit {
       this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
     }
     this.documentManagerService.selectedMetaData(this.selectedData);
-    this.loader.show();
+    
     this.router.navigate(['/document-manager/details','create']);
   }
 

@@ -173,7 +173,7 @@
             <mat-icon (click)="stopEvent();cloneRecord(column,'clone',i+1);">file_copy</mat-icon>
           </div>
           <div fxFlex.xs="50" fxFlex.lg="15" fxFlex.md="15" fxFlex.sm="15" *ngIf="!column.cloneIndication">
-            <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent()">{{column.COLUMN_NAME}}</mat-checkbox>
+            <mat-checkbox [(ngModel)]="column.checked" class="" (click)="stopEvent();">{{column.COLUMN_NAME}}</mat-checkbox>
           </div>
           <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25" *ngIf="column.cloneIndication">
 
@@ -196,7 +196,7 @@
           </div>
           <div fxFlex.xs="50" fxFlex.lg="25" fxFlex.md="25" fxFlex.sm="25">
             <mat-form-field (click)="stopEvent()">
-              <mat-select placeholder="View Type" [(ngModel)]="column.vtype">
+              <mat-select placeholder="View Type" [(ngModel)]="column.vtype" [disabled]="!column.checked">
                 <mat-option *ngFor="let vtype of viewTypes" [value]="vtype.value">{{vtype.name}}</mat-option>
               </mat-select>
             </mat-form-field>

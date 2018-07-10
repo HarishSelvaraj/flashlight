@@ -96,7 +96,7 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
   constructor(private router: Router, private loader: NgxSpinnerService, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
-    this.loader.hide();
+    // this.loader.show();
     this.route.params.subscribe(params => {
 
       //this.formType = params['formType'];
@@ -150,7 +150,8 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loader.show();
+    // alert('detail');
+    // this.loader.show();
     this.generalService.getlookups('lookup', this.requestLookup).subscribe
       (repsonse => {
         this.loader.hide();

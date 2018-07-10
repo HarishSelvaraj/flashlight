@@ -58,7 +58,7 @@ export class DocumentManagerComponent implements OnInit {
     this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
       (repsonse => {
         this.loader.hide();
-        this.toastr.success('MetaData Added Successfully');
+        // this.toastr.success('MetaData Added Successfully');
         this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
         for (var i = 0; i < this.docList.length; i++) {
           this.docList[i].sno = i + 1;

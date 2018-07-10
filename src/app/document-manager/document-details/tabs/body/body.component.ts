@@ -241,6 +241,9 @@ export class BodyComponent implements OnInit {
   stopEvent() {
     event.stopPropagation();
   }
+  // uncheck(column,i) {
+  //   console.log(column);
+  // }
   open(data_bind) {
     const acc = document.getElementsByClassName('accordion');
     let i;
@@ -325,6 +328,10 @@ export class BodyComponent implements OnInit {
        
       }
     }
+  }
+
+  chng() {
+    alert('asdf')
   }
   onChangedCheckBox(column) {
     //debugger;
