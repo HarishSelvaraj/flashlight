@@ -61,7 +61,13 @@ body{
   padding: 0px !important;
   margin: 0px !important;
   height:100%;
+  font-family:"opensans", sans-serif !important;
 }
+.mat-input-element{
+   font-family:"opensans", sans-serif !important;
+   font-size:14px;
+}
+
 
 bootstrap-growl{
     position:absolute;
@@ -84,7 +90,9 @@ bootstrap-growl{
 .ps-content {
   height: 100%;
 }
-
+.mat-input-element{
+  font-family:open
+}
 .loader-container {
     background-color: white;
     width: 100vw;

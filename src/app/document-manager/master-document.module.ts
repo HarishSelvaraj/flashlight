@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatTabsModule, MatTooltipModule, MatChipsModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatDividerModule, MatCheckboxModule } from '@angular/material';
+import { MatTabsModule, MatTooltipModule, MatChipsModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatDividerModule, MatCheckboxModule, MatAutocompleteModule } from '@angular/material';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -77,7 +77,8 @@ export const appRoutes: Routes = [
     FlexLayoutModule,
     MatExpansionModule,
     MatCheckboxModule,
-    HttpClientModule
+    HttpClientModule,
+    MatAutocompleteModule
   ],
   declarations: [MasterDocumentComponent,
     DocumentManagerComponent,

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { DocumentManagerService } from '../services/document-manager.service';
 import {GeneralServiceService} from '../../service/general-service.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-create-document',
@@ -51,14 +52,17 @@ export class CreateDocumentComponent implements OnInit {
   formTypes:any;
 
 
-  constructor(private router: Router, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { 
-    this.formTypes=this.documentManagerService.formTypesData
+  constructor(private router: Router,private loader: NgxSpinnerService, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { 
+    this.formTypes = this.documentManagerService.formTypesData;
+    this.loader.hide();
   }
 
   ngOnInit() {
+    this.loader.show();
     let api = 'addNewDocument';
     this.generalServiceService.getDbLlist(api).subscribe
       (repsonse => {
+        this.loader.hide();
         this.dbList = repsonse['createDocument'].dbname;
         this.formRecord = repsonse['createDocument'].form;
        // this.masterData = repsonse['createDocument'].form.master;
@@ -67,23 +71,26 @@ export class CreateDocumentComponent implements OnInit {
   }
 
   selectFormType() {
-    debugger;
+    //debugger;
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
   onChangeDB(db) {
-    
+    this.loader.show();
     this.requestTableData.dbname = db
     this.generalServiceService.getTableLlist('listTablesInDatabase', this.requestTableData).subscribe
       (repsonse => {
-        this.objectList = repsonse['metaDataResult'].tableList;
+        this.loader.hide();
+        this.objectList = repsonse['metaDataResult'].table;
       });
   }
   onChangeTable(table) {
+    this.loader.show();
     this.requestColumnData.dbname = this.requestTableData.dbname;
     this.requestColumnData.tablename = table;
     this.generalServiceService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
       (repsonse => {
+        this.loader.hide();
         this.columnstList = repsonse['metaDataResult'].columns;
       });
   }
@@ -112,6 +119,7 @@ export class CreateDocumentComponent implements OnInit {
       this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
     }
     this.documentManagerService.selectedMetaData(this.selectedData);
+    this.loader.show();
     this.router.navigate(['/document-manager/details','create']);
   }
 

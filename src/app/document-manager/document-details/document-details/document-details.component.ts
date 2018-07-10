@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ResponsiveTableHelpers } from '../../helpers.data';
 import { DocumentManagerService } from '../../services/document-manager.service';
 import {GeneralServiceService} from '../../../service/general-service.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-document-details',
@@ -94,10 +95,12 @@ export class DocumentDetailsComponent implements OnInit {
       }]
   }
 
-  constructor(private router: Router, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+  constructor(private router: Router, private loader: NgxSpinnerService, private detectChange: ChangeDetectorRef, private route: ActivatedRoute, private generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+    this.loader.hide();
     this.route.params.subscribe(params => {
 
       //this.formType = params['formType'];
+      this.documentManagerService.selectedData.params = params['formType'];
       if (params['formType'] == 'edit') {
         //this.documentManagerService['selectedData'].selectedMeta;
         this.metaInfo = this.documentManagerService['selectedData'].selectedMeta
@@ -109,8 +112,8 @@ export class DocumentDetailsComponent implements OnInit {
             this.documentManagerService.setDocumentFormTypes(this.formType);
           }
         }
-        debugger;
-        this.documentManagerService.selectedData.params = params['formType'];
+        //debugger;
+
         this.requestExisting.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
         this.requestExisting.doc_type = this.documentManagerService.selectedData.selectedMeta._fl_doc_type;
         //this.generalService.getExistingColums('showExistingDocument', this.requestExisting).subscribe
@@ -147,19 +150,20 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loader.show();
     this.generalService.getlookups('lookup', this.requestLookup).subscribe
       (repsonse => {
-
+        this.loader.hide();
         this.lookupsData = repsonse['metaDataRelatedTables'].metaDataResult;
-      }); debugger;
+      });// debugger;
     this.createInitData();
   }
 
 
 
   saveform() {
-
+    this.loader.show();
+    let apiUrl = "addNewMetaDataDocument";
     this.requestBody.metaJson = {
       menu: [],
       master: this.documentManagerService.selectedData.masterData,
@@ -167,45 +171,56 @@ export class DocumentDetailsComponent implements OnInit {
     };
 
     if (this.documentManagerService.selectedData.params == 'edit') {
-
+      apiUrl = "updateExistingDocument";
       this.requestBody.metaJson.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
-
-
+      for (var i in this.documentManagerService.selectedData.existingColumns) {
+        if (!this.documentManagerService.selectedData.existingColumns[i].checked) {
+          this.documentManagerService.selectedData.existingColumns[i]._fl_elem_view = 'X';
+        }
+        delete this.documentManagerService.selectedData.existingColumns[i].checked;
+      }
+      this.requestBody.metaJson.details = this.documentManagerService.selectedData.existingColumns;
+      
     }
-    //else {
-
-    for (let key in this.formTypesselected) {
-      for (let item in this.formTypesselected[key].columns) {
-        if (this.formTypesselected[key].columns[item].checked) {
-          this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
-
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_default_value = this.formTypesselected[key].columns[item].defaultValue ? this.formTypesselected[key].columns[item].defaultValue : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_type = this.formTypesselected[key].columns[item].etype ? this.formTypesselected[key].columns[item].etype : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].columns[item].label ? this.formTypesselected[key].columns[item].label : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_view = this.formTypesselected[key].columns[item].vtype ? this.formTypesselected[key].columns[item].vtype : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_len = this.formTypesselected[key].columns[item].length ? this.formTypesselected[key].columns[item].length : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_data_size = this.formTypesselected[key].columns[item].size ? this.formTypesselected[key].columns[item].size : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_name = this.formTypesselected[key].columns[item].COLUMN_NAME ? this.formTypesselected[key].columns[item].COLUMN_NAME : "";
-          this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_obj_type = 3;
+    else {
+    
+      for (let key in this.formTypesselected) {
+        for (let item in this.formTypesselected[key].columns) {
+          if (this.formTypesselected[key].columns[item].checked) {
+            this.requestBody.metaJson.details.push(Object['assign']({}, this.documentManagerService.selectedData.detailsData))
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_default_value = this.formTypesselected[key].columns[item].defaultValue ? this.formTypesselected[key].columns[item].defaultValue : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_type = this.formTypesselected[key].columns[item].etype ? this.formTypesselected[key].columns[item].etype : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_label = this.formTypesselected[key].columns[item].label ? this.formTypesselected[key].columns[item].label : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_view = this.formTypesselected[key].columns[item].vtype ? this.formTypesselected[key].columns[item].vtype : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_len = this.formTypesselected[key].columns[item].elmtLength ? this.formTypesselected[key].columns[item].elmtLength : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_data_size = this.formTypesselected[key].columns[item].elmtSize ? this.formTypesselected[key].columns[item].elmtSize : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_type = this.formTypesselected[key].value ? this.formTypesselected[key].value : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_doc_name = this.documentManagerService.selectedData.baseName + '_' + this.formTypesselected[key].viewValue;
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_name = this.formTypesselected[key].columns[item].COLUMN_NAME ? this.formTypesselected[key].columns[item].COLUMN_NAME : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_obj_type = 3;
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_show_in = this.formTypesselected[key].columns[item].showIn ? this.formTypesselected[key].columns[item].showIn : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_show_for = this.formTypesselected[key].columns[item].showFor ? this.formTypesselected[key].columns[item].showFor : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_data = this.formTypesselected[key].columns[item].elmtData ? this.formTypesselected[key].columns[item].elmtData : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_show_order = this.formTypesselected[key].columns[item].order ? this.formTypesselected[key].columns[item].order : "";
+            this.requestBody.metaJson.details[this.requestBody.metaJson.details.length - 1]._fl_elem_ref = this.formTypesselected[key].columns[item].lookup ? this.formTypesselected[key].columns[item].lookup : "";
+          }
         }
       }
+
     }
 
-    //}
-
-
-    this.generalService.postMetaData('addNewMetaDataDocument', this.requestBody).subscribe
+    debugger;
+    this.generalService.postMetaData(apiUrl, this.requestBody).subscribe
       (repsonse => {
-
+        this.loader.hide();
         this.router.navigate(['/document-manager']);
         //this.objectList = repsonse['metaDataResult'].tableList;
       });
     this.requestBody;
   }
   editDocument() {
+    this.loader.show();
     this.router.navigate(['/document-manager/addnew']);
   }
 
