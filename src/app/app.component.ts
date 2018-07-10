@@ -7,6 +7,7 @@ import {
   transition,
   query,
 } from '@angular/animations'
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import {
 })
 export class AppComponent {
   title = 'app';
+  
   getRouteAnimation(outlet) {
     return outlet.activatedRouteData.animation
 }

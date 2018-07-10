@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ViewContainerRef, Output, EventEmitter } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { ResponsiveTableHelpers } from '../helpers.data';
 import { Router } from '@angular/router';
 import { GeneralServiceService } from '../../service/general-service.service';
 import { DocumentManagerService } from '../services/document-manager.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-document-manager',
@@ -45,14 +47,18 @@ export class DocumentManagerComponent implements OnInit {
     "dbModel": "sqlModel",
     "database": "mssql"
   }
-  constructor(private router: Router, public generalService: GeneralServiceService, private documentManagerService: DocumentManagerService) {
+  constructor(private router: Router, public generalService: GeneralServiceService, private documentManagerService: DocumentManagerService, private loader: NgxSpinnerService, public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.toastr.setRootViewContainerRef(vcr);
   }
 
   ngOnInit() {
+    this.loader.show();
     this.documentManagerService.selectedData = {};
     this.documentManagerService.formTypes = {};
     this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
       (repsonse => {
+        this.loader.hide();
+        this.toastr.success('MetaData Added Successfully');
         this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
         for (var i = 0; i < this.docList.length; i++) {
           this.docList[i].sno = i + 1;
@@ -83,12 +89,15 @@ export class DocumentManagerComponent implements OnInit {
   }
 
   DeleteDocument(data) {
+    this.loader.show();
     this.requestData['metaJson'] = {
       "menu": [], "master": [],
       "details": [], "doc_name": data._fl_doc_name
     };
     this.generalService.deleteMetadatalist('updateExistingDocument', this.requestData).subscribe
       (repsonse => {
+        this.loader.hide();
+        this.toastr.success('Succesfully Deleted');
         this.ngOnInit();
       });
   }

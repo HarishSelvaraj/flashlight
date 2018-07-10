@@ -7,7 +7,6 @@ import { MasterModule } from './master/master.module';
 import { ReportsComponent } from './reports/reports.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
-// import {BootstrapGrowlModule, BootstrapGrowlComponent, BootstrapGrowlService} from "ng2-bootstrap-growl";
 
 @NgModule({
   declarations: [
