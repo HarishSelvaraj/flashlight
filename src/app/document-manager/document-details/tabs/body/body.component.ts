@@ -48,7 +48,7 @@ export class BodyComponent implements OnInit {
   lookupOptions: string[] = ['Lookup 1', 'Lookup 2', 'Test lookup', 'Lookup'];
   filteredOptions: Observable<string[]>;
 
-  elementType = ['TEXT', 'SELECT', 'TEXTAREA', 'LABEL', 'DATE', 'DATETIME', 'NUMBER', 'LINE BREAK', 'CD', 'CB', 'MD', 'MB'];
+  elementType = ['TEXT', 'SELECT', 'TEXTAREA', 'LABEL', 'DATE', 'DATETIME', 'NUMBER', 'LINE BREAK'];
   elementData = ['TEXT', 'SMALLINT', 'DATE', 'HIDDEN', 'DATETIME', 'PASSWORD', 'EMAIL', 'NUMBER'];
   //elementTypes = [
   //    {
@@ -126,7 +126,7 @@ export class BodyComponent implements OnInit {
           this.documentManagerService.selectedData.detailsData = repsonse['details'];
           this.existingColumns = repsonse['showSelectedData'].metaDataResult;
           this.documentManagerService.selectedData.existingColumns = this.existingColumns;
-          debugger;
+
           //for (var key = 0; key < this.columns.length; key++) {
           //  for (let item in this.existingColumns) {
           //    if (this.existingColumns[item]._fl_elem_name == this.columns[key].COLUMN_NAME) {
@@ -273,6 +273,7 @@ export class BodyComponent implements OnInit {
       clonedColumn.order = ""; clonedColumn.elmtSize = "";
       clonedColumn.elmtLength = ""; clonedColumn.showIn = "";
       clonedColumn.tblReference = ""; clonedColumn.elmtDatashowFor = "";
+      clonedColumn.lookup = "";
     }
     if (clonedColumn.COLUMN_NAME == "") {
       clonedColumn.checked = false;
@@ -283,11 +284,45 @@ export class BodyComponent implements OnInit {
       col.order = index + 1;
     });
   }
+
+  editCloneRecord(originalColumn, clonetype, index) {
+    debugger;
+    let rowNumber = index;
+    let clonedColumn = JSON.parse(JSON.stringify(originalColumn));
+    if (originalColumn.prevColumnName) {
+      clonedColumn.prevColumnName = originalColumn.prevColumnName;
+    } else {
+      clonedColumn.prevColumnName = originalColumn._fl_elem_name;
+    }
+    if (clonetype == "add") {
+      clonedColumn._fl_data_size = ""; clonedColumn._fl_elem_name = ""; clonedColumn._fl_elem_type = "";
+      clonedColumn._fl_elem_label = ""; clonedColumn._fl_elem_view = ""; clonedColumn._fl_default_value = "";
+      clonedColumn._fl_show_order = ""; 
+      clonedColumn._fl_elem_len = ""; clonedColumn._fl_show_in = "";
+      clonedColumn._fl_show_for = "";
+      clonedColumn._fl_elem_ref = "";
+      clonedColumn.__fl_elem_data = "";
+    }
+    if (clonedColumn._fl_elem_name == "") {
+      clonedColumn.checked = false;
+    }
+    clonedColumn.cloneIndication = true;
+    this.existingColumns.splice(rowNumber, 0, clonedColumn);
+    this.existingColumns.forEach((col, index) => {
+      col._fl_show_order = index + 1;
+    });
+  }
+
   onChangeEtype(etype, column) {
 
     if (etype != "LABEL" && etype != "LINE BREAK") {
       if (column.prevColumnName) {
-        column.COLUMN_NAME = column.prevColumnName;
+        if (this.documentManagerService.selectedData.params == 'edit') {
+          column._fl_elem_name = column.prevColumnName;
+        } else {
+          column.COLUMN_NAME = column.prevColumnName;
+        }
+       
       }
     }
   }
@@ -298,18 +333,28 @@ export class BodyComponent implements OnInit {
     //}
   }
   onChangeColumn(column) {
-    debugger;
-    if (column.etype != "LABEL" && column.etype != "LINE BREAK" && column.etype != "") {
-      if (column.prevColumnName) {
-        column.COLUMN_NAME = column.prevColumnName;
+    if (this.documentManagerService.selectedData.params == 'edit') {
+      if (column._fl_elem_type != "LABEL" && column._fl_elem_type != "LINE BREAK" && column._fl_elem_type != "") {
+        if (column.prevColumnName) {
+          column._fl_elem_name = column.prevColumnName;
+        }
       }
-    }
-    if (column.COLUMN_NAME == "") {
-      column.checked = false;
+      if (column._fl_elem_name == "") {
+        column.checked = false;
+      }
+    } else {
+      if (column.etype != "LABEL" && column.etype != "LINE BREAK" && column.etype != "") {
+        if (column.prevColumnName) {
+          column.COLUMN_NAME = column.prevColumnName;
+        }
+      }
+      if (column.COLUMN_NAME == "") {
+        column.checked = false;
+      }
     }
   }
   removeClonedColumn(clonedColumn, index) {
-    debugger;
+    
     if (this.isPrimaryTable == 'create') {
       this.columns.splice(index, 1);
       this.columns.forEach((col, index) => {
