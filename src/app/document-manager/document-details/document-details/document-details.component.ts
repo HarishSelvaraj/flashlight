@@ -112,7 +112,6 @@ export class DocumentDetailsComponent implements OnInit {
             this.documentManagerService.setDocumentFormTypes(this.formType);
           }
         }
-        //debugger;
 
         this.requestExisting.doc_name = this.documentManagerService.selectedData.selectedMeta._fl_doc_name;
         this.requestExisting.doc_type = this.documentManagerService.selectedData.selectedMeta._fl_doc_type;
@@ -123,7 +122,6 @@ export class DocumentDetailsComponent implements OnInit {
         //    for (let key in this.existingColumns) {
         //      for (let item in this.columnsList) {
         //        if (this.existingColumns[key]._fl_elem_name == this.columnsList[item].COLUMN_NAME) {
-        //          debugger;
         //          this.columnsList[item].etype = this.existingColumns[key]._fl_elem_type
         //          this.columnsList[item].label = this.existingColumns[key]._fl_elem_label
         //          this.columnsList[item].vtype = this.existingColumns[key]._fl_elem_view
@@ -155,7 +153,7 @@ export class DocumentDetailsComponent implements OnInit {
       (repsonse => {
         this.loader.hide();
         this.lookupsData = repsonse['metaDataRelatedTables'].metaDataResult;
-      });// debugger;
+      });
     this.createInitData();
   }
 
@@ -209,8 +207,6 @@ export class DocumentDetailsComponent implements OnInit {
       }
 
     }
-
-    debugger;
     this.generalService.postMetaData(apiUrl, this.requestBody).subscribe
       (repsonse => {
         this.loader.hide();

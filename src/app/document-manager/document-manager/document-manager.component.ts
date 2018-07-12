@@ -52,6 +52,7 @@ export class DocumentManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+   
     this.loader.show();
     this.documentManagerService.selectedData = {};
     this.documentManagerService.formTypes = {};
@@ -112,7 +113,6 @@ export class DocumentManagerComponent implements OnInit {
     this.router.navigate(['/document-manager/addnew']);
   }
   EditDocument(metaData) {
-   // debugger;
     this.loader.show();
     delete metaData['sno'];
     this.documentManagerService.selectedData.selectedMeta = metaData;
@@ -130,7 +130,7 @@ export class DocumentManagerComponent implements OnInit {
       "tablename": metaData._fl_base_table
     }
     this.documentManagerService.selectedData.baseName = metaData._fl_base_name;
-    this.documentManagerService.selectedData.masterData =[ metaData];
+    this.documentManagerService.selectedData.masterData = [metaData];
     this.requestColumnData.dbname = "Incite"
     this.requestColumnData.tablename = metaData._fl_base_table;
     this.generalService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe

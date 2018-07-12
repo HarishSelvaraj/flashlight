@@ -28,7 +28,6 @@ export class SharedComponent implements OnInit {
     console.log('i am in shared componenet');
    
     //for (let key in this.columns) {
-    //  debugger;
     //  this.existingColumns.push(JSON.parse(JSON.stringify(this.documentManagerService.selectedData.detailsData)));
     //  this.existingColumns[this.existingColumns.length - 1].checked = true;
     //  this.existingColumns[this.existingColumns.length - 1]._fl_elem_len = this.columns[key].CHARACTER_MAXIMUM_LENGTH;
@@ -68,7 +67,6 @@ export class SharedComponent implements OnInit {
     //for (let key in this.formTypesSelected) {
     //  this.formTypesSelected[key].existingColumns = JSON.parse(JSON.stringify(this.existingColumns));// Object['assign']([], this.columns);
     //}
-    //debugger;
     //this.documentManagerService.selectedData;
     // this.dataSource.renderedData.forEach(data => this.selection.select(data.id));
     this.columns.forEach((col, index) => {

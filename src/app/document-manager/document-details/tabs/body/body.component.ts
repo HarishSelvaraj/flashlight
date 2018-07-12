@@ -107,7 +107,6 @@ export class BodyComponent implements OnInit {
   ngOnInit() {
     this.getRows();
     this.show = false;
-    debugger;
    
     this.columns;
     this.isPrimaryTable = this.documentManagerService.selectedData.params;
@@ -121,7 +120,6 @@ export class BodyComponent implements OnInit {
 
       this.generalService.getExistingColums('showExistingDocument', this.requestExisting).subscribe
         (repsonse => {
-          //debugger;
           //this.details.push()
           this.documentManagerService.selectedData.detailsData = repsonse['details'];
           this.existingColumns = repsonse['showSelectedData'].metaDataResult;
@@ -140,7 +138,6 @@ export class BodyComponent implements OnInit {
           //}
           let unmatchElem = [];
           for (let key in this.existingColumns) {
-            debugger;
             if (this.existingColumns[key]._fl_elem_view == 'X') {
               this.existingColumns[key].checked = false;
             } else {
@@ -149,7 +146,6 @@ export class BodyComponent implements OnInit {
             let elemData = false;
             //for (let item in this.columns) {
             //  if ((this.existingColumns[key]._fl_elem_name == this.columns[item].COLUMN_NAME) && !this.columns[item].elmtassigned) {
-            //    // debugger;
             //    elemData = true;
             //    this.columns[item].checked = true;
             //    this.columns[item].etype = this.existingColumns[key]._fl_elem_type
@@ -187,7 +183,6 @@ export class BodyComponent implements OnInit {
             //  })
             //}
           }
-          //debugger;
           //unmatchElem;
 
           //if (unmatchElem.length > 0) {
@@ -195,7 +190,6 @@ export class BodyComponent implements OnInit {
           //    this.columns.push(unmatchElem[i]);
           //  }
           //}
-          //debugger;
           //this.columns.sort((a, b): any => {
           //  if (JSON.parse(a.order) < JSON.parse(b.order)) return -1;
           //  if (JSON.parse(a.order) > JSON.parse(b.order)) return 1;
@@ -259,7 +253,7 @@ export class BodyComponent implements OnInit {
   }
 
   cloneRecord(originalColumn, clonetype, index) {
-    debugger;
+
     let rowNumber = index;
     let clonedColumn = JSON.parse(JSON.stringify(originalColumn));
     if (originalColumn.prevColumnName) {
@@ -286,7 +280,7 @@ export class BodyComponent implements OnInit {
   }
 
   editCloneRecord(originalColumn, clonetype, index) {
-    debugger;
+
     let rowNumber = index;
     let clonedColumn = JSON.parse(JSON.stringify(originalColumn));
     if (originalColumn.prevColumnName) {
@@ -327,7 +321,7 @@ export class BodyComponent implements OnInit {
     }
   }
   onChangedCheckBox(column) {
-    //debugger;
+
     //if (!column.checked) {
     //  column._fl_elem_view = 'X';
     //}

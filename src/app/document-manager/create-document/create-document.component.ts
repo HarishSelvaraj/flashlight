@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { DocumentManagerService } from '../services/document-manager.service';
-import {GeneralServiceService} from '../../service/general-service.service';
+import { GeneralServiceService } from '../../service/general-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -29,7 +29,7 @@ export class CreateDocumentComponent implements OnInit {
   baseName;
   dbList: any;
   objectList: any;
-  columnstList: any;
+  columnstList: any = [];
   selectedData: any = {};
   masterData: any = [];
   detailsData: any;
@@ -49,10 +49,10 @@ export class CreateDocumentComponent implements OnInit {
 
   //  formType = new FormControl();
   formType: any;
-  formTypes:any;
+  formTypes: any;
 
 
-  constructor(private router: Router,private loader: NgxSpinnerService, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) { 
+  constructor(private router: Router, private loader: NgxSpinnerService, private documentManagerService: DocumentManagerService, private generalServiceService: GeneralServiceService) {
     this.formTypes = this.documentManagerService.formTypesData;
     this.loader.hide();
   }
@@ -65,42 +65,78 @@ export class CreateDocumentComponent implements OnInit {
         this.loader.hide();
         this.dbList = repsonse['createDocument'].dbname;
         this.formRecord = repsonse['createDocument'].form;
-       // this.masterData = repsonse['createDocument'].form.master;
-       // this.detailsData = repsonse['createDocument'].form.detail;
+        // this.masterData = repsonse['createDocument'].form.master;
+        // this.detailsData = repsonse['createDocument'].form.detail;
       });
   }
 
   selectFormType() {
-    //debugger;
     this.documentManagerService.setDocumentFormTypes(this.formType);
   }
 
   onChangeDB(db) {
     this.loader.show();
-    this.requestTableData.dbname = db
-    this.generalServiceService.getTableLlist('listTablesInDatabase', this.requestTableData).subscribe
-      (repsonse => {
+    // this.requestTableData.dbname = db
+    // this.generalServiceService.getTableLlist('listTablesInDatabase', this.requestTableData).subscribe
+    //   (repsonse => {
+    //     this.loader.hide();
+    //     this.objectList = repsonse['metaDataResult'].table;
+    //   });
+
+    // form request
+    this.generalServiceService.request.reqbody.lookup = "META_TABLES";
+    this.generalServiceService.request.reqbody.oper = "list";
+
+    this.generalServiceService.getData('search').subscribe
+      (response => {
         this.loader.hide();
-        this.objectList = repsonse['metaDataResult'].table;
+        let modifiedResponse = this.generalServiceService.getResult(response);
+        this.objectList = modifiedResponse.results.rows;
       });
+
   }
   onChangeTable(table) {
     this.loader.show();
-    this.requestColumnData.dbname = this.requestTableData.dbname;
-    this.requestColumnData.tablename = table;
-    this.generalServiceService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
-      (repsonse => {
+    // this.requestColumnData.dbname = this.requestTableData.dbname;
+    // this.requestColumnData.tablename = table;
+    // this.generalServiceService.getColumnlist('listAllColumnsInATable', this.requestColumnData).subscribe
+    //   (repsonse => {
+    //     this.loader.hide();
+    //     this.columnstList = repsonse['metaDataResult'].columns;
+    //   });
+
+    // "filter":[{"t":"@eq", "k":"TABLE_NAME", "v":["Master"]}],
+    this.generalServiceService.request.reqbody.lookup = "META_COLUMN";
+    this.generalServiceService.request.reqbody.oper = "LIST";
+
+    // add filter --> add table name as filter
+    this.generalServiceService.request.reqbody.filter = [{
+      "t": "@eq",
+      "k": "TABLE_NAME",
+      "v": [table]
+    }];
+    this.generalServiceService.getData('search').subscribe
+      (response => {
         this.loader.hide();
-        this.columnstList = repsonse['metaDataResult'].columns;
+        let modifiedResponse = this.generalServiceService.getResult(response);
+        this.columnstList = modifiedResponse.results.rows;
+
+        // allCoulmnsList.forEach(element => {
+        //   if (element.TABLE_NAME == table) {
+        //     this.columnstList.push(element);
+        //   }
+        // });
       });
+
+
   }
   documentDetails() {
-    console.log(this.formType);
+   // console.log(this.formType);
     //if (this.formType['status'] == "INVALID") {
     //  alert('Pls select at least one form type.');
     //  return false;
     //}
-    
+
     this.selectedData.db = this.requestTableData;
     this.selectedData.table = this.requestColumnData;
     this.selectedData.columns = this.columnstList;
@@ -108,19 +144,19 @@ export class CreateDocumentComponent implements OnInit {
     if (this.formType.length > 0) {
       for (let key in this.formType) {
         this.masterData.push(Object['assign']({}, this.formRecord['master']));
-        this.masterData[key]._fl_doc_name = this.baseName +'_'+ this.formType[key].viewValue;
+        this.masterData[key]._fl_doc_name = this.baseName + '_' + this.formType[key].viewValue;
         this.masterData[key]._fl_doc_type = this.formType[key].value;
         this.masterData[key]._fl_base_name = this.baseName;
         this.masterData[key]._fl_base_table = this.requestColumnData.tablename;
 
       }
-      
+
       this.selectedData.masterData = this.masterData;
       this.selectedData.detailsData = Object['assign']({}, this.formRecord['detail']);
     }
     this.documentManagerService.selectedMetaData(this.selectedData);
     this.loader.show();
-    this.router.navigate(['/document-manager/details','create']);
+    this.router.navigate(['/document-manager/details', 'create']);
   }
 
 }

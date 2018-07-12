@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  //apiUrl: 'http://10.91.16.195:3002/meta/'
-  apiUrl: 'http://10.91.19.182:4002/meta/'
+ //apiUrl: 'http://10.91.16.195:4002/meta/'
+  apiUrl: 'http://10.91.19.182:4002/api/'
 };
