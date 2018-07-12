@@ -56,16 +56,28 @@ export class DocumentManagerComponent implements OnInit {
     this.loader.show();
     this.documentManagerService.selectedData = {};
     this.documentManagerService.formTypes = {};
-    this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
-      (repsonse => {
+    // this.generalService.getMetaDataList('listDocuments', this.requestData).subscribe
+    //   (repsonse => {
+    //     this.loader.hide();
+    //     this.toastr.success('MetaData Added Successfully');
+    //     this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
+    //     for (var i = 0; i < this.docList.length; i++) {
+    //       this.docList[i].sno = i + 1;
+    //     }
+    //     this.getRows();
+    //   });
+
+    this.generalService.request.reqbody.lookup = "META_MASTER";
+    this.generalService.request.reqbody.oper = "LIST";
+    this.generalService.getData('search').subscribe
+      (response => {
         this.loader.hide();
-        this.toastr.success('MetaData Added Successfully');
-        this.docList = repsonse['metaDataRelatedTables'].metaDataResult;
-        for (var i = 0; i < this.docList.length; i++) {
-          this.docList[i].sno = i + 1;
-        }
+        let res = this.generalService.getResult(response);
+        this.docList = res.results.rows;
         this.getRows();
       });
+
+
   }
   next(event) {
     this.rows = [];
